@@ -2,34 +2,35 @@ name: Lua Lint (ESX)
 
 on:
   push:
-    branches: main
-  pull_request:
-    paths:
-      - "**/*.lua"
+    branches: [ "main", "dev" ]
+  pull_request_target:
+    branches: [ "*" ]
 
 permissions:
-  checks: write
   contents: read
 
 jobs:
-  lua-lint:
+  lint:
+    name: Lint Lua Resource
     runs-on: self-hosted
-    timeout-minutes: 10
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run LuaCheck
-        shell: powershell
-        run: |
-          luacheck . `
-            --formatter JUnit `
-            --output luacheck-report.xml
-
-      - name: Publish JUnit Report
-        if: always()
-        uses: mikepenz/action-junit-report@v4
+      - name: Checkout code
+        uses: actions/checkout@v6
         with:
-          report_paths: luacheck-report.xml
-          fail_on_failure: true
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Run Lua Linter
+        uses: iLLeniumStudios/fivem-lua-lint-action@v2
+        with:
+          capture: "junit.xml"
+          args: "-t --formatter JUnit"
+          extra_libs: mysql
+
+      - name: Publish Lint Report
+        if: always()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: "**/junit.xml"
+          check_name: "Lua Lint Report"
+          fail_on_failure: false
