@@ -1,0 +1,38 @@
+name: Lua Lint (ESX)
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    paths:
+      - "**/*.lua"
+
+jobs:
+  lua-lint:
+    runs-on: [self-hosted, windows, skull, lua]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install LuaCheck
+        shell: powershell
+        run: |
+          luarocks install luacheck
+
+      - name: Run LuaCheck (ESX)
+        shell: powershell
+        run: |
+          luacheck . `
+            --formatter JUnit `
+            --codes `
+            --globals ESX exports Citizen lib source `
+            --output luacheck-report.xml
+
+      - name: Publish JUnit Report
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: luacheck-report.xml
+          fail_on_failure: true
