@@ -1,4 +1,4 @@
-std = "lua54"
+std = "lua53"
 
 globals = {
   "ESX",
