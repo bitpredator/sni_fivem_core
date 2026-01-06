@@ -21,15 +21,20 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Verify Luacheck installation
+      # --- PASSO OBBLIGATORIO: assicurati di avere luacheck.exe in C:\tools ---
+      - name: Verify Luacheck
         shell: powershell
         run: |
-          luacheck --version
+          if (-Not (Test-Path "C:\tools\luacheck.exe")) {
+            Write-Error "Luacheck non trovato in C:\tools\luacheck.exe. Scarica il binario e mettilo in questa cartella."
+          } else {
+            C:\tools\luacheck.exe --version
+          }
 
       - name: Run Luacheck
         shell: powershell
         run: |
-          luacheck . --config .luacheckrc --formatter JUnit --codes --output junit.xml
+          C:\tools\luacheck.exe . --config .luacheckrc --formatter JUnit --codes --output junit.xml
 
       - name: Publish Luacheck Report
         if: always()
