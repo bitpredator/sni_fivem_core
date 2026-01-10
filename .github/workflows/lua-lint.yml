@@ -52,3 +52,10 @@ jobs:
           report_paths: junit.xml
           check_name: Lua Lint Report
           fail_on_failure: false
+
+          # 🔑 per avere SEMPRE risultati visibili
+          include_passed: true
+          include_empty_in_summary: true
+          job_summary: true
+          verbose_summary: true
+          check_annotations: false
