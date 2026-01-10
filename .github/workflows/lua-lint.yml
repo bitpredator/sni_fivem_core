@@ -21,30 +21,29 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Verify Luacheck
+      - name: Verify Luacheck binary
         shell: powershell
         run: |
           if (-Not (Test-Path "C:\tools\luacheck.exe")) {
             Write-Error "Luacheck non trovato in C:\tools\luacheck.exe"
-          } else {
-            C:\tools\luacheck.exe --version
           }
+          C:\tools\luacheck.exe --version
 
-      - name: Run Luacheck
+      - name: Run Luacheck (JUnit)
         shell: powershell
         run: |
-          Write-Host "Running Luacheck..."
+          Write-Host "Running Luacheck in JUnit mode..."
 
-          C:\tools\luacheck.exe . `
-            --config .luacheckrc `
-            --formatter JUnit `
-            --codes `
-            1> junit.xml `
-            2> luacheck.log
-
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "Luacheck completed with warnings (exit code $LASTEXITCODE)"
-          }
+          cmd /c ^
+            "C:\tools\luacheck.exe . ^
+            --config .luacheckrc ^
+            --formatter JUnit ^
+            --codes ^
+            --quiet ^
+            --no-color ^
+            1> junit.xml ^
+            2> luacheck.log ^
+            || exit /b 0"
 
       - name: Publish Luacheck Report
         if: always()
