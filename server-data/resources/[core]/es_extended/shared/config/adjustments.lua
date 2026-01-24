@@ -73,7 +73,7 @@ Config.DiscordActivity = {
     assetText = "{server_name}", -- Text to display on the asset
     buttons = {
         { label = "Join Server", url = "fivem://connect/{server_endpoint}" },
-        { label = "Discord", url = "https://discord.esx-framework.org" },
+        { label = "Discord", url = "https://discord.gg/Skw6unXVHG" },
     },
     presence = "{player_name} [{player_id}] | {server_players}/{server_maxplayers}",
     refresh = 1 * 60 * 1000, -- 1 minute

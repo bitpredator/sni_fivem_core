@@ -1,5 +1,5 @@
 <h1 align='center'>bpt_boat</a></h1>
-<p align='center'><a href='https://discord.gg/Jrm2Z26ad3'>Discord Skull Network Italia</a>
+<p align='center'><a href='https://discord.gg/Skw6unXVHG'>Discord Skull Network Italia</a>
 
 Copyright (C) 2026 bitpredator
 
