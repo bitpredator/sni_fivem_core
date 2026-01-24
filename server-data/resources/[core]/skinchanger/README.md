@@ -1,4 +1,5 @@
-<h1 align='center'>[ESX] SkinChanger</a></h1><p align='center'><b><a href='https://discord.esx-framework.org/'>Discord</a> - <a href='https://esx-framework.org/'>Website</a> - <a href='https://docs.esx-legacy.com/legacy/installation'>Documentation</a></b></h5>
+<h1 align='center'>[ESX] SkinChanger</a></h1>
+<p align='center'><a href='https://discord.gg/Skw6unXVHG'>Discord Skull Network Italia</a>
 
 skinchanger is a resource used to both Set and Get Players clothing, accessories and Model - It supports the freemode peds `mp_m_freemode_01` and `mp_f_freemode_01` as well as all Ped Features.
 

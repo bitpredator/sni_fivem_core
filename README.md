@@ -1,5 +1,5 @@
 <h1 align='center'> SKULL NETWORK ITALIA FIVEM SERVER</a></h1>
-<p align='center'><a href='https://discord.gg/Jrm2Z26ad3'>Discord Skull Network Italia</a>
+<p align='center'><a href='https://discord.gg/Skw6unXVHG'>Discord Skull Network Italia</a>
 
 # SKULL NETWORK ITALIA
 

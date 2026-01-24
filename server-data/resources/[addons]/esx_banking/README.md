@@ -1,7 +1,5 @@
-<h1 align='center'>[ESX] Banking</a></h1><p align='center'><b><a href='https://discord.esx-framework.org/'>Discord</a> - <a href='https://esx-framework.org/'>Website</a> - <a href='https://docs.esx-framework.org/legacy/installation'>Documentation</a></b></h5>
-
-A beautiful and Easy-To-Use Banking & ATM system for ESX
-
+<h1 align='center'>[ESX] Banking</a></h1>
+<p align='center'><a href='https://discord.gg/Skw6unXVHG'>Discord Skull Network Italia</a>
 
 ## BANK UI
 ![esx_banking_pic1](https://user-images.githubusercontent.com/22717950/189738189-375101ac-c86b-4ce8-8df3-19d740c3809c.png)
