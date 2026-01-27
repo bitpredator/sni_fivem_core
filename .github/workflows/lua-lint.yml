@@ -1,94 +1,64 @@
-name: Lua Quality (FiveM / ESX)
+name: Lua Quality
 
 on:
   push:
     branches: [ "main", "dev" ]
+
   pull_request:
     branches: [ "*" ]
+    types: [ opened, synchronize, reopened, labeled ]
 
 permissions:
   contents: read
   checks: write
 
 jobs:
-  lint:
-    name: Lua Quality (Windows Self-Hosted)
-    runs-on: self-hosted
+  lua-quality:
+    name: Lua Lint & Formatting
+    runs-on: ubuntu-latest
 
     steps:
       # ------------------------
       # CHECKOUT
       # ------------------------
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       # ------------------------
-      # VERIFY BINARIES
+      # LUA LINT (iLLeniumStudios)
       # ------------------------
-      - name: Verify tools
-        shell: powershell
-        run: |
-          $luacheckPath = "C:\tools\luacheck.exe"
-          if (-Not (Test-Path $luacheckPath)) {
-              Write-Host "luacheck.exe not found! Please verify path."
-              exit 1
-          } else {
-              Write-Host "Found luacheck.exe"
-              & $luacheckPath --version
-          }
-
-          $styluaPath = "C:\tools\stylua.exe"
-          if (-Not (Test-Path $styluaPath)) {
-              Write-Host "stylua.exe not found! Please verify path."
-              exit 1
-          } else {
-              Write-Host "Found stylua.exe"
-              & $styluaPath --version
-          }
+      - name: Run Lua Linter
+        uses: iLLeniumStudios/fivem-lua-lint-action@v2
+        with:
+          capture: "junit.xml"
+          args: "-t --formatter JUnit"
+          extra_libs: mysql
 
       # ------------------------
-      # STYLUA (CHECK ONLY → DIFF INLINE)
+      # STYLUA CHECK (CONDITIONAL)
       # ------------------------
-      - name: Stylua format check
-        shell: powershell
-        continue-on-error: true
-        run: |
-          Write-Host "Running Stylua check..."
-          $styluaPath = "C:\tools\stylua.exe"
-          $report = "stylua-report.diff"
-
-          # Run Stylua check in diff mode
-          & $styluaPath . --diff > $report 2> stylua.log
-          $exitCode = $LASTEXITCODE
-
-          Add-Content $env:GITHUB_STEP_SUMMARY "## Stylua Format Check"
-          if ($exitCode -eq 0) {
-              Add-Content $env:GITHUB_STEP_SUMMARY "- No formatting issues detected."
-          } else {
-              Add-Content $env:GITHUB_STEP_SUMMARY "- Formatting issues detected. See stylua.diff below."
-              Add-Content $env:GITHUB_STEP_SUMMARY ""
-              Get-Content $report | ForEach-Object { Add-Content $env:GITHUB_STEP_SUMMARY ("`" + $_ + "`") }
-          }
+      - name: Run Stylua Check
+        if: >
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' &&
+           github.event.action == 'labeled' &&
+           github.event.label.name == 'format_all')
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v0.18.0
+          args: --check .
 
       # ------------------------
-      # LUACHECK (JUnit + ANNOTATIONS)
+      # PUBLISH JUNIT REPORT
       # ------------------------
-      - name: Run Luacheck
-        shell: powershell
-        run: |
-          Write-Host "Running Luacheck..."
-          $luacheckPath = "C:\tools\luacheck.exe"
-          & $luacheckPath . --config .luacheckrc --formatter JUnit --codes --quiet --no-color 1> junit.xml 2> luacheck.log
-          exit 0
-
-      # ------------------------
-      # PUBLISH LUACHECK REPORT + WARNINGS INLINE
-      # ------------------------
-      - name: Publish Luacheck Report
+      - name: Publish Lua Lint Report
         if: always()
         uses: mikepenz/action-junit-report@v6
         with:
-          report_paths: junit.xml
+          report_paths: "**/junit.xml"
           check_name: Lua Lint Report
           fail_on_failure: false
           include_passed: true
