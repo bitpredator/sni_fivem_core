@@ -1,82 +1,64 @@
-name: Lua Quality (FiveM / ESX)
+name: Lua Quality
 
 on:
   push:
     branches: [ "main", "dev" ]
+
   pull_request:
     branches: [ "*" ]
+    types: [ opened, synchronize, reopened, labeled ]
 
 permissions:
   contents: read
   checks: write
 
 jobs:
-  lint:
-    name: Lua Quality (Windows Self-Hosted)
-    runs-on: self-hosted
+  lua-quality:
+    name: Lua Lint & Formatting
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # ------------------------
+      # CHECKOUT
+      # ------------------------
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       # ------------------------
-      # VERIFY BINARIES
+      # LUA LINT (iLLeniumStudios)
       # ------------------------
-      - name: Verify tools
-        shell: powershell
-        run: |
-          if (-Not (Test-Path "C:\tools\luacheck.exe")) { Write-Error "luacheck.exe not found"; exit 1 }
-          if (-Not (Test-Path "C:\tools\stylua.exe")) { Write-Error "stylua.exe not found"; exit 1 }
-
-          C:\tools\luacheck.exe --version
-          C:\tools\stylua.exe --version
+      - name: Run Lua Linter
+        uses: iLLeniumStudios/fivem-lua-lint-action@v2
+        with:
+          capture: "junit.xml"
+          args: "-t --formatter JUnit"
+          extra_libs: mysql
 
       # ------------------------
-      # STYLUA FORMAT CHECK + SUMMARY
+      # STYLUA CHECK (CONDITIONAL)
       # ------------------------
-      - name: Run Stylua (check only)
-        shell: powershell
-        continue-on-error: true
-        run: |
-          Write-Host "Running Stylua (check only)..."
-          C:\tools\stylua.exe . --check 2> stylua.log
-          $exitCode = $LASTEXITCODE
-
-          Add-Content $env:GITHUB_STEP_SUMMARY "## Stylua Format Check"
-          Add-Content $env:GITHUB_STEP_SUMMARY ""
-
-          if ($exitCode -eq 0) {
-            Add-Content $env:GITHUB_STEP_SUMMARY " Nessun problema di formattazione trovato."
-          } else {
-            Add-Content $env:GITHUB_STEP_SUMMARY " Problemi di formattazione rilevati. Controlla `stylua.log`."
-          }
+      - name: Run Stylua Check
+        if: >
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' &&
+           github.event.action == 'labeled' &&
+           github.event.label.name == 'format_all')
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v0.18.0
+          args: --check .
 
       # ------------------------
-      # LUACHECK (JUnit)
+      # PUBLISH JUNIT REPORT
       # ------------------------
-      - name: Run Luacheck (JUnit)
-        shell: powershell
-        run: |
-          Write-Host "Running Luacheck..."
-          cmd /c ^ 
-            "C:\tools\luacheck.exe . ^
-            --config .luacheckrc ^
-            --formatter JUnit ^
-            --codes ^
-            --quiet ^
-            --no-color ^
-            1> junit.xml ^
-            2> luacheck.log"
-          exit 0
-
-      # ------------------------
-      # PUBLISH LUACHECK REPORT
-      # ------------------------
-      - name: Publish Luacheck Report
+      - name: Publish Lua Lint Report
         if: always()
         uses: mikepenz/action-junit-report@v6
         with:
-          report_paths: junit.xml
+          report_paths: "**/junit.xml"
           check_name: Lua Lint Report
           fail_on_failure: false
           include_passed: true
