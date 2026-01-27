@@ -25,21 +25,20 @@ jobs:
       - name: Verify tools
         shell: powershell
         run: |
-          if (-Not (Test-Path "C:\tools\luacheck.exe")) { throw "luacheck.exe not found" }
-          if (-Not (Test-Path "C:\tools\stylua.exe")) { throw "stylua.exe not found" }
+          if (-Not (Test-Path "C:\tools\luacheck.exe")) { Write-Error "luacheck.exe not found"; exit 1 }
+          if (-Not (Test-Path "C:\tools\stylua.exe")) { Write-Error "stylua.exe not found"; exit 1 }
 
           C:\tools\luacheck.exe --version
           C:\tools\stylua.exe --version
 
       # ------------------------
-      # STYLUA (CHECK ONLY → SUMMARY)
+      # STYLUA FORMAT CHECK + SUMMARY
       # ------------------------
       - name: Run Stylua (check only)
         shell: powershell
         continue-on-error: true
         run: |
           Write-Host "Running Stylua (check only)..."
-
           C:\tools\stylua.exe . --check 2> stylua.log
           $exitCode = $LASTEXITCODE
 
@@ -47,50 +46,41 @@ jobs:
           Add-Content $env:GITHUB_STEP_SUMMARY ""
 
           if ($exitCode -eq 0) {
-            Add-Content $env:GITHUB_STEP_SUMMARY " Nessun problema di formattazione."
+            Add-Content $env:GITHUB_STEP_SUMMARY " Nessun problema di formattazione trovato."
           } else {
-            $count = (Get-Content stylua.log).Count
-            Add-Content $env:GITHUB_STEP_SUMMARY " Problemi di formattazione rilevati."
-            Add-Content $env:GITHUB_STEP_SUMMARY ""
-            Add-Content $env:GITHUB_STEP_SUMMARY "- Linee segnalate: **$count**"
-            Add-Content $env:GITHUB_STEP_SUMMARY "- Vedi `stylua.log` per i dettagli"
+            Add-Content $env:GITHUB_STEP_SUMMARY " Problemi di formattazione rilevati. Controlla `stylua.log`."
           }
 
       # ------------------------
-      # LUACHECK (ANNOTATIONS + SUMMARY)
+      # LUACHECK (JUnit)
       # ------------------------
-      - name: Run Luacheck (annotations)
+      - name: Run Luacheck (JUnit)
         shell: powershell
-        continue-on-error: true
         run: |
           Write-Host "Running Luacheck..."
-
-          C:\tools\luacheck.exe . `
-            --config .luacheckrc `
-            --codes `
-            --no-color `
-            --formatter plain `
-            2>&1 | Tee-Object -FilePath luacheck.log
-
-          $warnings = 0
-
-          foreach ($line in Get-Content luacheck.log) {
-            if ($line -match '(.+?):(\d+):(\d+):\s+\((W\d+)\)\s+(.*)') {
-              $file = $matches[1]
-              $lineNo = $matches[2]
-              $colNo = $matches[3]
-              $code = $matches[4]
-              $msg = $matches[5]
-
-              Write-Host "::warning file=$file,line=$lineNo,col=$colNo::$code $msg"
-              $warnings++
-            }
-          }
-
-          Add-Content $env:GITHUB_STEP_SUMMARY ""
-          Add-Content $env:GITHUB_STEP_SUMMARY "## Luacheck"
-          Add-Content $env:GITHUB_STEP_SUMMARY ""
-          Add-Content $env:GITHUB_STEP_SUMMARY "- Warning totali: **$warnings**"
-          Add-Content $env:GITHUB_STEP_SUMMARY "- Annotazioni inline abilitate ✔"
-
+          cmd /c ^ 
+            "C:\tools\luacheck.exe . ^
+            --config .luacheckrc ^
+            --formatter JUnit ^
+            --codes ^
+            --quiet ^
+            --no-color ^
+            1> junit.xml ^
+            2> luacheck.log"
           exit 0
+
+      # ------------------------
+      # PUBLISH LUACHECK REPORT
+      # ------------------------
+      - name: Publish Luacheck Report
+        if: always()
+        uses: mikepenz/action-junit-report@v6
+        with:
+          report_paths: junit.xml
+          check_name: Lua Lint Report
+          fail_on_failure: false
+          include_passed: true
+          include_empty_in_summary: true
+          job_summary: true
+          verbose_summary: true
+          check_annotations: true
