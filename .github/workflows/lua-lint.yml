@@ -91,6 +91,6 @@ jobs:
           Add-Content $env:GITHUB_STEP_SUMMARY "## Luacheck"
           Add-Content $env:GITHUB_STEP_SUMMARY ""
           Add-Content $env:GITHUB_STEP_SUMMARY "- Warning totali: **$warnings**"
-          Add-Content $env:GITHUB_STEP_SUMMARY "- Annotazioni inline abilitate: yes"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Annotazioni inline abilitate ✔"
 
           exit 0
