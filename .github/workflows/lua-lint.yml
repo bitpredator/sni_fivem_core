@@ -43,7 +43,7 @@ jobs:
           C:\tools\stylua.exe . --check 2> stylua.log
           $exitCode = $LASTEXITCODE
 
-          Add-Content $env:GITHUB_STEP_SUMMARY "## ✨ Stylua Format Check"
+          Add-Content $env:GITHUB_STEP_SUMMARY "## Stylua Format Check"
           Add-Content $env:GITHUB_STEP_SUMMARY ""
 
           if ($exitCode -eq 0) {
