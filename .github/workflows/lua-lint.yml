@@ -47,10 +47,10 @@ jobs:
           Add-Content $env:GITHUB_STEP_SUMMARY ""
 
           if ($exitCode -eq 0) {
-            Add-Content $env:GITHUB_STEP_SUMMARY "✅ Nessun problema di formattazione."
+            Add-Content $env:GITHUB_STEP_SUMMARY " Nessun problema di formattazione."
           } else {
             $count = (Get-Content stylua.log).Count
-            Add-Content $env:GITHUB_STEP_SUMMARY "⚠️ Problemi di formattazione rilevati."
+            Add-Content $env:GITHUB_STEP_SUMMARY " Problemi di formattazione rilevati."
             Add-Content $env:GITHUB_STEP_SUMMARY ""
             Add-Content $env:GITHUB_STEP_SUMMARY "- Linee segnalate: **$count**"
             Add-Content $env:GITHUB_STEP_SUMMARY "- Vedi `stylua.log` per i dettagli"
@@ -88,9 +88,9 @@ jobs:
           }
 
           Add-Content $env:GITHUB_STEP_SUMMARY ""
-          Add-Content $env:GITHUB_STEP_SUMMARY "## 🐞 Luacheck"
+          Add-Content $env:GITHUB_STEP_SUMMARY "## Luacheck"
           Add-Content $env:GITHUB_STEP_SUMMARY ""
           Add-Content $env:GITHUB_STEP_SUMMARY "- Warning totali: **$warnings**"
-          Add-Content $env:GITHUB_STEP_SUMMARY "- Annotazioni inline abilitate ✔"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- Annotazioni inline abilitate: yes"
 
           exit 0
