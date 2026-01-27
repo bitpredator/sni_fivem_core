@@ -1,9 +1,12 @@
+# Stylua configuration compatibile con 1.7.1 e 2.3.1
 column_width = 120
 indent_type = "Spaces"
 indent_width = 2
 line_endings = "Unix"
 
+# quote_style compatibile: AutoPreferDouble supportato da entrambe
 quote_style = "AutoPreferDouble"
+
 call_parentheses = "Always"
 collapse_simple_statement = "Never"
 
