@@ -41,7 +41,7 @@ Config.Multipliers = {
     ambientVehicleRange = 0.5,
     parkedVehicleDensity = 0.5,
     randomVehicleDensity = 0.5,
-    vehicleDensity = 0.5
+    vehicleDensity = 0.5,
 }
 
 -- Pattern string format

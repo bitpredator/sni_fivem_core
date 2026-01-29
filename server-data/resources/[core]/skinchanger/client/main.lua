@@ -196,11 +196,22 @@ function SkinChanger:SetFace()
 end
 
 function SkinChanger:SetHeadOverlay()
-    local features =
-        { { "blemishes_1", "blemishes_2" }, { "beard_1", "beard_2" }, { "eyebrows_1", "eyebrows_2" }, { "age_1", "age_2" }, { "makeup_1", "makeup_2" }, { "blush_1", "blush_2" }, { "complexion_1", "complexion_2" }, { "sun_1", "sun_2" }, { "lipstick_1", "lipstick_2" }, { "moles_1", "moles_2" }, {
+    local features = {
+        { "blemishes_1", "blemishes_2" },
+        { "beard_1", "beard_2" },
+        { "eyebrows_1", "eyebrows_2" },
+        { "age_1", "age_2" },
+        { "makeup_1", "makeup_2" },
+        { "blush_1", "blush_2" },
+        { "complexion_1", "complexion_2" },
+        { "sun_1", "sun_2" },
+        { "lipstick_1", "lipstick_2" },
+        { "moles_1", "moles_2" },
+        {
             "chest_1",
             "chest_2",
-        } }
+        },
+    }
     for i = 1, #features, 1 do
         local feature = features[i]
         SetPedHeadOverlay(self.playerPed, i - 1, self.character[feature[1]], Normalise(self.character[feature[2]], 10))

@@ -138,7 +138,9 @@ end
 ---@return boolean, string?
 function ESX.ValidateType(value, ...)
     local types = { ... }
-    if #types == 0 then return true end
+    if #types == 0 then
+        return true
+    end
 
     local mapType = {}
     for i = 1, #types, 1 do
@@ -221,38 +223,38 @@ end
 ---@param allowDigits boolean? Allow numbers if necessary
 ---@return boolean
 function ESX.IsValidLocaleString(str, allowDigits)
-    if not ESX.ValidateType(str, 'string') then
+    if not ESX.ValidateType(str, "string") then
         return false
     end
 
     local locale = string.lower(Config.Locale)
 
-    local defaultRanges ={
-        {0x0041, 0x005A}, -- Basic Latin uppercase
-        {0x0061, 0x007A}, -- Basic Latin lowercase
-        {0x0020, 0x0020}, -- Space
-        {0x002D, 0x002D}, -- Dash
-        {0x00C0, 0x02AF}  -- Latin Extended
+    local defaultRanges = {
+        { 0x0041, 0x005A }, -- Basic Latin uppercase
+        { 0x0061, 0x007A }, -- Basic Latin lowercase
+        { 0x0020, 0x0020 }, -- Space
+        { 0x002D, 0x002D }, -- Dash
+        { 0x00C0, 0x02AF }, -- Latin Extended
     }
 
     if allowDigits then
-        defaultRanges[#defaultRanges + 1] = {0x0030, 0x0039} -- 0-9 Numbers
+        defaultRanges[#defaultRanges + 1] = { 0x0030, 0x0039 } -- 0-9 Numbers
     end
 
     local localeRanges = {
-        ["el"] = { {0x0370, 0x03FF} }, -- Greek
-        ["sr"] ={ {0x0400, 0x04FF} }, -- Cyrillic
-        ["he"] ={ {0x05D0, 0x05EA} }, -- Hebrew letters
+        ["el"] = { { 0x0370, 0x03FF } }, -- Greek
+        ["sr"] = { { 0x0400, 0x04FF } }, -- Cyrillic
+        ["he"] = { { 0x05D0, 0x05EA } }, -- Hebrew letters
         ["ar"] = {
-            {0x0620, 0x063F}, -- Arabic
-            {0x0641, 0x064A},
-            {0x066E, 0x066F},
-            {0x0671, 0x06D3},
-            {0x06D5, 0x06D5},
-            {0x0750, 0x077F},
-            {0x08A0, 0x08BD}
+            { 0x0620, 0x063F }, -- Arabic
+            { 0x0641, 0x064A },
+            { 0x066E, 0x066F },
+            { 0x0671, 0x06D3 },
+            { 0x06D5, 0x06D5 },
+            { 0x0750, 0x077F },
+            { 0x08A0, 0x08BD },
         },
-        ["zh-cn"] ={ {0x4E00, 0x9FFF} } -- CJK
+        ["zh-cn"] = { { 0x4E00, 0x9FFF } }, -- CJK
     }
 
     local validRanges = { table.unpack(defaultRanges) }

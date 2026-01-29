@@ -14,11 +14,10 @@ Callbacks.id = 0
 -- MARK: Internal Functions
 -- =============================================
 
-
 function Callbacks:Register(name, resource, cb)
     self.storage[name] = {
         resource = resource,
-        cb = cb
+        cb = cb,
     }
 end
 
@@ -35,7 +34,7 @@ end
 function Callbacks:Trigger(event, cb, invoker, ...)
     self.requests[self.id] = {
         await = type(cb) == "boolean",
-        cb = cb or promise:new()
+        cb = cb or promise:new(),
     }
     local table = self.requests[self.id]
 
@@ -98,7 +97,9 @@ function ESX.AwaitServerCallback(eventName, ...)
     local invoker = (invokingResource and invokingResource ~= "unknown") and invokingResource or "es_extended"
 
     local p = Callbacks:Trigger(eventName, false, invoker, ...)
-    if not p then return end
+    if not p then
+        return
+    end
 
     -- if the server callback takes longer than 15 seconds to respond, reject the promise
     SetTimeout(15000, function()

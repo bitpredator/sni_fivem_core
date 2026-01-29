@@ -129,9 +129,7 @@ function ESX.OneSync.SpawnVehicle(vehicleModel, coords, heading, vehicleProperti
 
         local hasNetOwner = next(ESX.OneSync.GetClosestPlayer(coords, 300, nil, 0) or {}) ~= nil
 
-        while not createdVehicle or createdVehicle == 0
-            or (hasNetOwner and NetworkGetEntityOwner(createdVehicle) == -1)
-            or (not hasNetOwner and not DoesEntityExist(createdVehicle)) do
+        while not createdVehicle or createdVehicle == 0 or (hasNetOwner and NetworkGetEntityOwner(createdVehicle) == -1) or (not hasNetOwner and not DoesEntityExist(createdVehicle)) do
             Wait(200)
             tries = tries + 1
             if tries > 40 then
@@ -186,7 +184,7 @@ function ESX.OneSync.SpawnObject(model, coords, heading, cb)
 
         while not DoesEntityExist(entity) do
             Wait(200)
-            
+
             tries = tries + 1
 
             if tries > 40 then

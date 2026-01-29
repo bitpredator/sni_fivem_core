@@ -17,7 +17,7 @@ Callbacks.id = 0
 function Callbacks:Register(name, resource, cb)
     self.storage[name] = {
         resource = resource,
-        cb = cb
+        cb = cb,
     }
 end
 
@@ -26,7 +26,7 @@ function Callbacks:Execute(cb, ...)
 
     if not success then
         print(("[^1ERROR^7] Failed to execute Callback with RequestId: ^5%s^7"):format(self.currentId))
-        print("^3Callback Error:^7 " .. tostring(errorString))  -- just log, don't throw
+        print("^3Callback Error:^7 " .. tostring(errorString)) -- just log, don't throw
         self.currentId = nil
         return
     end
@@ -37,7 +37,7 @@ end
 function Callbacks:Trigger(player, event, cb, invoker, ...)
     self.requests[self.id] = {
         await = type(cb) == "boolean",
-        cb = cb or promise:new()
+        cb = cb or promise:new(),
     }
     local table = self.requests[self.id]
 
@@ -104,7 +104,9 @@ function ESX.AwaitClientCallback(player, eventName, ...)
     local invoker = (invokingResource and invokingResource ~= "Unknown") and invokingResource or "es_extended"
 
     local p = Callbacks:Trigger(player, eventName, false, invoker, ...)
-    if not p then return end
+    if not p then
+        return
+    end
 
     SetTimeout(15000, function()
         if p.state == "pending" then

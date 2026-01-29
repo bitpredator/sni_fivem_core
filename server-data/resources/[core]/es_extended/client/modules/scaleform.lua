@@ -3,7 +3,7 @@ ESX.Scaleform.Utils = {}
 
 function ESX.Scaleform.ShowFreemodeMessage(title, msg, sec)
     local scaleform = ESX.Scaleform.Utils.RunMethod("MP_BIG_MESSAGE_FREEMODE", "SHOW_SHARD_WASTED_MP_MESSAGE", false, title, msg)
-    
+
     local endTime = GetGameTimer() + (sec * 1000)
     while GetGameTimer() < endTime do
         Wait(0)

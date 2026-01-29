@@ -40,11 +40,11 @@ Config.AdminGroups = {
 }
 
 Config.ValidCharacterSets = { -- Only enable additional charsets if your server is multilingual. By default everything is false.
-    ['el'] = false, -- Greek
-    ['sr'] = false, -- Cyrillic
-    ['he'] = false, -- Hebrew
-    ['ar'] = false, -- Arabic
-    ['zh-cn'] = false -- Chinese, Japanese, Korean
+    ["el"] = false, -- Greek
+    ["sr"] = false, -- Cyrillic
+    ["he"] = false, -- Hebrew
+    ["ar"] = false, -- Arabic
+    ["zh-cn"] = false, -- Chinese, Japanese, Korean
 }
 
 Config.EnablePaycheck = false -- enable paycheck

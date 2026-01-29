@@ -40,11 +40,10 @@ end
 ---@param target vector
 ---@return number
 function ESX.Math.GetHeadingFromCoords(origin, target)
-	local dx = origin.x - target.x
+    local dx = origin.x - target.x
     local dy = origin.y - target.y
 
     local heading = math.deg(math.atan(dy, dx)) + 90
 
     return (heading + 360) % 360
 end
-
