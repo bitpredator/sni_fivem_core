@@ -228,7 +228,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 2) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("hair_2"),
@@ -240,7 +240,7 @@ Config.Components = {
         textureof = "hair_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 2, Character["hair_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("hair_color_1"),
@@ -251,7 +251,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("hair_color_2"),
@@ -262,7 +262,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("tshirt_1"),
@@ -274,7 +274,7 @@ Config.Components = {
         componentId = 8,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 8) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("tshirt_2"),
@@ -286,7 +286,7 @@ Config.Components = {
         textureof = "tshirt_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 8, Character["tshirt_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("torso_1"),
@@ -298,7 +298,7 @@ Config.Components = {
         componentId = 11,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 11) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("torso_2"),
@@ -310,7 +310,7 @@ Config.Components = {
         textureof = "torso_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 11, Character["torso_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("decals_1"),
@@ -322,7 +322,7 @@ Config.Components = {
         componentId = 10,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 10) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("decals_2"),
@@ -334,7 +334,7 @@ Config.Components = {
         textureof = "decals_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 10, Character["decals_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("arms"),
@@ -345,7 +345,7 @@ Config.Components = {
         camOffset = 0.15,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 3) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("arms_2"),
@@ -366,7 +366,7 @@ Config.Components = {
         componentId = 4,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 4) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("pants_2"),
@@ -378,7 +378,7 @@ Config.Components = {
         textureof = "pants_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 4, Character["pants_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("shoes_1"),
@@ -390,7 +390,7 @@ Config.Components = {
         componentId = 6,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 6) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("shoes_2"),
@@ -402,7 +402,7 @@ Config.Components = {
         textureof = "shoes_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 6, Character["shoes_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("mask_1"),
@@ -414,7 +414,7 @@ Config.Components = {
         componentId = 1,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 1) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("mask_2"),
@@ -426,7 +426,7 @@ Config.Components = {
         textureof = "mask_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 1, Character["mask_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bproof_1"),
@@ -438,7 +438,7 @@ Config.Components = {
         componentId = 9,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 9) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bproof_2"),
@@ -450,7 +450,7 @@ Config.Components = {
         textureof = "bproof_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 9, Character["bproof_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("chain_1"),
@@ -462,7 +462,7 @@ Config.Components = {
         componentId = 7,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 7) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("chain_2"),
@@ -474,7 +474,7 @@ Config.Components = {
         textureof = "chain_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 7, Character["chain_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("helmet_1"),
@@ -486,7 +486,7 @@ Config.Components = {
         componentId = 0,
         max = function(playerPed)
             return GetNumberOfPedPropDrawableVariations(playerPed, 0) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("helmet_2"),
@@ -498,7 +498,7 @@ Config.Components = {
         textureof = "helmet_1",
         max = function(playerPed, Character)
             return GetNumberOfPedPropTextureVariations(playerPed, 0, Character["helmet_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("glasses_1"),
@@ -510,7 +510,7 @@ Config.Components = {
         componentId = 1,
         max = function(playerPed)
             return GetNumberOfPedPropDrawableVariations(playerPed, 1) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("glasses_2"),
@@ -522,7 +522,7 @@ Config.Components = {
         textureof = "glasses_1",
         max = function(playerPed, Character)
             return GetNumberOfPedPropTextureVariations(playerPed, 1, Character["glasses_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("watches_1"),
@@ -534,7 +534,7 @@ Config.Components = {
         componentId = 6,
         max = function(playerPed)
             return GetNumberOfPedPropDrawableVariations(playerPed, 6) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("watches_2"),
@@ -546,7 +546,7 @@ Config.Components = {
         textureof = "watches_1",
         max = function(playerPed, Character)
             return GetNumberOfPedPropTextureVariations(playerPed, 6, Character["watches_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bracelets_1"),
@@ -558,7 +558,7 @@ Config.Components = {
         componentId = 7,
         max = function(playerPed)
             return GetNumberOfPedPropDrawableVariations(playerPed, 7) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bracelets_2"),
@@ -570,7 +570,7 @@ Config.Components = {
         textureof = "bracelets_1",
         max = function(playerPed, Character)
             return GetNumberOfPedPropTextureVariations(playerPed, 7, Character["bracelets_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bag"),
@@ -582,7 +582,7 @@ Config.Components = {
         componentId = 5,
         max = function(playerPed)
             return GetNumberOfPedDrawableVariations(playerPed, 5) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bag_color"),
@@ -594,7 +594,7 @@ Config.Components = {
         textureof = "bags_1",
         max = function(playerPed, Character)
             return GetNumberOfPedTextureVariations(playerPed, 5, Character["bags_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("eye_color"),
@@ -632,7 +632,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(2) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("eyebrow_color_1"),
@@ -643,7 +643,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("eyebrow_color_2"),
@@ -654,7 +654,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("eyebrow_height"),
@@ -683,7 +683,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(4) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("makeup_thickness"),
@@ -703,7 +703,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("makeup_color_2"),
@@ -714,7 +714,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("lipstick_type"),
@@ -725,7 +725,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(8) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("lipstick_thickness"),
@@ -745,7 +745,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("lipstick_color_2"),
@@ -756,7 +756,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("ear_accessories"),
@@ -768,7 +768,7 @@ Config.Components = {
         componentId = 2,
         max = function(playerPed)
             return GetNumberOfPedPropDrawableVariations(playerPed, 2) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("ear_accessories_color"),
@@ -780,7 +780,7 @@ Config.Components = {
         textureof = "ears_1",
         max = function(playerPed, Character)
             return GetNumberOfPedPropTextureVariations(playerPed, 2, Character["ears_1"]) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("chest_hair"),
@@ -791,7 +791,7 @@ Config.Components = {
         camOffset = 0.15,
         max = function()
             return GetPedHeadOverlayNum(10) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("chest_hair_1"),
@@ -811,7 +811,7 @@ Config.Components = {
         camOffset = 0.15,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bodyb"),
@@ -822,7 +822,7 @@ Config.Components = {
         camOffset = 0.15,
         max = function()
             return GetPedHeadOverlayNum(11) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bodyb_size"),
@@ -842,7 +842,7 @@ Config.Components = {
         camOffset = 0.15,
         max = function()
             return GetPedHeadOverlayNum(12) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("bodyb_extra_thickness"),
@@ -862,7 +862,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(3) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("wrinkle_thickness"),
@@ -882,7 +882,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(0) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("blemishes_size"),
@@ -902,7 +902,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(5) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("blush_1"),
@@ -922,7 +922,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("complexion"),
@@ -933,7 +933,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(6) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("complexion_1"),
@@ -953,7 +953,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(7) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("sun_1"),
@@ -973,7 +973,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(9) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("freckles_1"),
@@ -993,7 +993,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetPedHeadOverlayNum(1) - 1
-        end
+        end,
     },
     {
         label = TranslateCap("beard_size"),
@@ -1013,7 +1013,7 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
     {
         label = TranslateCap("beard_color_2"),
@@ -1024,6 +1024,6 @@ Config.Components = {
         camOffset = 0.65,
         max = function()
             return GetNumHairColors() - 1
-        end
+        end,
     },
 }

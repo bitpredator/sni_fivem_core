@@ -11,7 +11,7 @@
 local CurrentProgress = nil
 
 local function startProcessing()
-    while (CurrentProgress ~= nil) do
+    while CurrentProgress ~= nil do
         if CurrentProgress.length > 0 then
             CurrentProgress.length = CurrentProgress.length - 1000
         else
@@ -56,8 +56,8 @@ local function Progressbar(message, length, Options)
         message = message or "ESX-Framework",
     })
     CurrentProgress.length = length or 3000
-    CreateThread(startProcessing);
-    return true;
+    CreateThread(startProcessing)
+    return true
 end
 
 local function CancelProgressbar()

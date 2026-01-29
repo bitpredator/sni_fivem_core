@@ -1,4 +1,3 @@
-
 SkinChanger = {}
 SkinChanger._index = SkinChanger
 
@@ -94,16 +93,75 @@ function SkinChanger:LoadSkin(skin, cb)
 end
 
 function SkinChanger:ValidClothes(key)
-    local keys = {["sex"] = true, ["mom"] = true, ["dad"] = true, ["face_md_weight"] = true, ["skin_md_weight"] = true, ["nose_1"] = true, ["nose_2"] = true,
-    ["nose_3"] = true, ["nose_4"] = true, ["nose_5"] = true, ["nose_6"] = true, ["cheeks_1"] = true, ["cheeks_2"] = true, ["cheeks_3"] = true,
-    ["lip_thickness"] = true, ["jaw_1"] = true, ["jaw_2"] = true, ["chin_1"] = true, ["chin_2"] = true, ["chin_3"] = true, ["chin_4"] = true,
-    ["neck_thickness"] = true, ["age_1"] = true, ["age_2"] = true, ["eye_color"] = true, ["eye_squint"] = true, ["beard_1"] = true, ["beard_2"] = true,
-    ["beard_3"] = true, ["beard_4"] = true, ["hair_1"] = true, ["hair_2"] = true, ["hair_color_1"] = true, ["hair_color_2"] = true, ["eyebrows_1"] = true,
-    ["eyebrows_2"] = true, ["eyebrows_3"] = true, ["eyebrows_4"] = true, ["eyebrows_5"] = true, ["eyebrows_6"] = true, ["makeup_1"] = true, ["makeup_2"] = true,
-    ["makeup_3"] = true, ["makeup_4"] = true, ["lipstick_1"] = true, ["lipstick_2"] = true, ["lipstick_3"] = true, ["lipstick_4"] = true, ["blemishes_1"] = true,
-    ["blemishes_2"] = true, ["blemishes_3"] = true, ["blush_1"] = true, ["blush_2"] = true, ["blush_3"] = true, ["complexion_1"] = true, ["complexion_2"] = true,
-    ["sun_1"] = true, ["sun_2"] = true, ["moles_1"] = true, ["moles_2"] = true, ["chest_1"] = true, ["chest_2"] = true, ["chest_3"] = true, ["bodyb_1"] = true,
-    ["bodyb_2"] = true, ["bodyb_3"] = true, ["bodyb_4"] = true}
+    local keys = {
+        ["sex"] = true,
+        ["mom"] = true,
+        ["dad"] = true,
+        ["face_md_weight"] = true,
+        ["skin_md_weight"] = true,
+        ["nose_1"] = true,
+        ["nose_2"] = true,
+        ["nose_3"] = true,
+        ["nose_4"] = true,
+        ["nose_5"] = true,
+        ["nose_6"] = true,
+        ["cheeks_1"] = true,
+        ["cheeks_2"] = true,
+        ["cheeks_3"] = true,
+        ["lip_thickness"] = true,
+        ["jaw_1"] = true,
+        ["jaw_2"] = true,
+        ["chin_1"] = true,
+        ["chin_2"] = true,
+        ["chin_3"] = true,
+        ["chin_4"] = true,
+        ["neck_thickness"] = true,
+        ["age_1"] = true,
+        ["age_2"] = true,
+        ["eye_color"] = true,
+        ["eye_squint"] = true,
+        ["beard_1"] = true,
+        ["beard_2"] = true,
+        ["beard_3"] = true,
+        ["beard_4"] = true,
+        ["hair_1"] = true,
+        ["hair_2"] = true,
+        ["hair_color_1"] = true,
+        ["hair_color_2"] = true,
+        ["eyebrows_1"] = true,
+        ["eyebrows_2"] = true,
+        ["eyebrows_3"] = true,
+        ["eyebrows_4"] = true,
+        ["eyebrows_5"] = true,
+        ["eyebrows_6"] = true,
+        ["makeup_1"] = true,
+        ["makeup_2"] = true,
+        ["makeup_3"] = true,
+        ["makeup_4"] = true,
+        ["lipstick_1"] = true,
+        ["lipstick_2"] = true,
+        ["lipstick_3"] = true,
+        ["lipstick_4"] = true,
+        ["blemishes_1"] = true,
+        ["blemishes_2"] = true,
+        ["blemishes_3"] = true,
+        ["blush_1"] = true,
+        ["blush_2"] = true,
+        ["blush_3"] = true,
+        ["complexion_1"] = true,
+        ["complexion_2"] = true,
+        ["sun_1"] = true,
+        ["sun_2"] = true,
+        ["moles_1"] = true,
+        ["moles_2"] = true,
+        ["chest_1"] = true,
+        ["chest_2"] = true,
+        ["chest_3"] = true,
+        ["bodyb_1"] = true,
+        ["bodyb_2"] = true,
+        ["bodyb_3"] = true,
+        ["bodyb_4"] = true,
+    }
     return keys[key] == nil
 end
 
@@ -125,13 +183,11 @@ function SkinChanger:SetHead()
         self.character["grandparents"] = 0
     end
 
-    SetPedHeadBlendData(self.playerPed,
-    self.character["mom"], self.character["dad"], self.character["grandparents"] , self.character["mom"],
-    self.character["dad"], self.character["grandparents"], face_weight, skin_weight, third_weight, false)
+    SetPedHeadBlendData(self.playerPed, self.character["mom"], self.character["dad"], self.character["grandparents"], self.character["mom"], self.character["dad"], self.character["grandparents"], face_weight, skin_weight, third_weight, false)
 end
 
 function SkinChanger:SetFace()
-    local features = {"nose_1", "nose_2", "nose_3", "nose_4", "nose_5", "nose_6", "eyebrows_5", "eyebrows_6", "cheeks_1", "cheeks_2", "cheeks_3", "eye_squint", "lip_thickness", "jaw_1", "jaw_2", "chin_1", "chin_2", "chin_3", "chin_4", "neck_thickness"}
+    local features = { "nose_1", "nose_2", "nose_3", "nose_4", "nose_5", "nose_6", "eyebrows_5", "eyebrows_6", "cheeks_1", "cheeks_2", "cheeks_3", "eye_squint", "lip_thickness", "jaw_1", "jaw_2", "chin_1", "chin_2", "chin_3", "chin_4", "neck_thickness" }
     for i = 1, #features, 1 do
         local feature = features[i]
         SetPedFaceFeature(self.playerPed, i - 1, Normalise(self.character[feature], 10))
@@ -140,7 +196,11 @@ function SkinChanger:SetFace()
 end
 
 function SkinChanger:SetHeadOverlay()
-    local features = {{"blemishes_1", "blemishes_2"}, {"beard_1", "beard_2"}, {"eyebrows_1", "eyebrows_2"}, {"age_1", "age_2"}, {"makeup_1", "makeup_2"}, {"blush_1", "blush_2"}, {"complexion_1", "complexion_2"}, {"sun_1", "sun_2"}, {"lipstick_1", "lipstick_2"}, {"moles_1", "moles_2"}, {"chest_1", "chest_2"}}
+    local features =
+        { { "blemishes_1", "blemishes_2" }, { "beard_1", "beard_2" }, { "eyebrows_1", "eyebrows_2" }, { "age_1", "age_2" }, { "makeup_1", "makeup_2" }, { "blush_1", "blush_2" }, { "complexion_1", "complexion_2" }, { "sun_1", "sun_2" }, { "lipstick_1", "lipstick_2" }, { "moles_1", "moles_2" }, {
+            "chest_1",
+            "chest_2",
+        } }
     for i = 1, #features, 1 do
         local feature = features[i]
         SetPedHeadOverlay(self.playerPed, i - 1, self.character[feature[1]], Normalise(self.character[feature[2]], 10))
@@ -148,7 +208,7 @@ function SkinChanger:SetHeadOverlay()
 end
 
 function SkinChanger:SetHeadOverlayColour()
-    local features = {[1] = {"beard_3", "beard_4"}, [2] = {"eyebrows_3", "eyebrows_4"}, [4] = {"makeup_3", "makeup_4"}, [5] = {"blush_3", 0}, [8] = {"lipstick_3", "lipstick_4"}, [10] = {"chest_3", 0}}
+    local features = { [1] = { "beard_3", "beard_4" }, [2] = { "eyebrows_3", "eyebrows_4" }, [4] = { "makeup_3", "makeup_4" }, [5] = { "blush_3", 0 }, [8] = { "lipstick_3", "lipstick_4" }, [10] = { "chest_3", 0 } }
     for i, feature in pairs(features) do
         SetPedHeadOverlayColor(self.playerPed, i, 1, self.character[feature[1]], self.character[feature[2]])
     end
@@ -171,7 +231,8 @@ function SkinChanger:SetHair()
 end
 
 function SkinChanger:SetComponents()
-    local components = {{"tshirt_1", "tshirt_2", 8}, {"torso_1", "torso_2", 11}, {"decals_1", "decals_2", 10}, {"arms", "arms_2", 3}, {"pants_1", "pants_2", 4}, {"shoes_1", "shoes_2", 6}, {"mask_1", "mask_2", 1}, {"bproof_1", "bproof_2", 9}, {"chain_1", "chain_2", 7}, {"bags_1", "bags_2", 5}}
+    local components =
+        { { "tshirt_1", "tshirt_2", 8 }, { "torso_1", "torso_2", 11 }, { "decals_1", "decals_2", 10 }, { "arms", "arms_2", 3 }, { "pants_1", "pants_2", 4 }, { "shoes_1", "shoes_2", 6 }, { "mask_1", "mask_2", 1 }, { "bproof_1", "bproof_2", 9 }, { "chain_1", "chain_2", 7 }, { "bags_1", "bags_2", 5 } }
     for i = 1, #components, 1 do
         local component = components[i]
         SetPedComponentVariation(self.playerPed, component[3], self.character[component[1]], self.character[component[2]], 2)
@@ -179,7 +240,7 @@ function SkinChanger:SetComponents()
 end
 
 function SkinChanger:SetProps()
-    local props = {{"helmet_1", "helmet_2", 0}, {"glasses_1", "glasses_2", 1}, {"ears_1", "ears_2", 2}, {"watches_1", "watches_2", 6}, {"bracelets_1", "bracelets_2", 7}}
+    local props = { { "helmet_1", "helmet_2", 0 }, { "glasses_1", "glasses_2", 1 }, { "ears_1", "ears_2", 2 }, { "watches_1", "watches_2", 6 }, { "bracelets_1", "bracelets_2", 7 } }
     for i = 1, #props, 1 do
         local prop = props[i]
         local propVal = self.character[prop[1]]

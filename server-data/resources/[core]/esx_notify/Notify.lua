@@ -8,7 +8,7 @@ local possiblePosition = {
     ["bottom-left"] = true,
     ["bottom-middle"] = true,
     ["middle-left"] = true,
-    ["middle-right"] = true
+    ["middle-right"] = true,
 }
 
 ---@param notificatonType string the notification type
@@ -18,11 +18,11 @@ local possiblePosition = {
 ---@param position string optional position for the notification
 local function Notify(notificatonType, length, message, title, position)
     if Debug then
-        print("1 ".. tostring(notificatonType))
-        print("2 "..tostring(length))
-        print("3 "..message)
-        print("4 "..tostring(title))
-        print("5 "..tostring(position))
+        print("1 " .. tostring(notificatonType))
+        print("2 " .. tostring(length))
+        print("3 " .. message)
+        print("4 " .. tostring(title))
+        print("5 " .. tostring(position))
     end
 
     if type(notificatonType) ~= "string" then
@@ -38,11 +38,11 @@ local function Notify(notificatonType, length, message, title, position)
     end
 
     if Debug then
-        print("6 ".. tostring(notificatonType))
-        print("7 "..tostring(length))
-        print("8 "..message)
-        print("9 "..tostring(title))
-        print("10 "..tostring(position))
+        print("6 " .. tostring(notificatonType))
+        print("7 " .. tostring(length))
+        print("8 " .. message)
+        print("9 " .. tostring(title))
+        print("10 " .. tostring(position))
     end
 
     if type(message) == "string" then
@@ -55,16 +55,16 @@ local function Notify(notificatonType, length, message, title, position)
         message = message or "ESX-Notify",
         title = title or "New Notification",
         position = position,
-        notificationSoundEnabled = Config.notificationSoundEnabled or false
+        notificationSoundEnabled = Config.notificationSoundEnabled or false,
     }))
 end
 
-exports('Notify', Notify)
+exports("Notify", Notify)
 RegisterNetEvent("ESX:Notify", Notify)
 
 if Debug then
     RegisterCommand("oldnotify", function()
-        ESX.ShowNotification('No Waypoint Set.', true, false, 140)
+        ESX.ShowNotification("No Waypoint Set.", true, false, 140)
     end)
 
     RegisterCommand("notify", function()
@@ -85,5 +85,5 @@ if Debug then
 
     RegisterCommand("notify4", function()
         ESX.ShowNotification("You Did something ~r~WRONG~s~!", "warning", 3000, "~y~Warning~s~")
-    end)   
+    end)
 end
