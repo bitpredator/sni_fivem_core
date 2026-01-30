@@ -360,9 +360,10 @@ function ESX.GetPlayerFromIdentifier(identifier)
 end
 
 ---@param identifier string
----@return number playerId
+---@return number|nil playerId
 function ESX.GetPlayerIdFromIdentifier(identifier)
-    return Core.playersByIdentifier[identifier]?.source
+    local player = Core.playersByIdentifier[identifier]
+    return player and player.source or nil
 end
 
 ---@param source number
