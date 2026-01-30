@@ -176,8 +176,16 @@ end
 ---@param val unknown
 function ESX.IsFunctionReference(val)
     local typeVal = type(val)
+    if typeVal == "function" then
+        return true
+    end
 
-    return typeVal == "function" or (typeVal == "table" and type(getmetatable(val)?.__call) == "function")
+    if typeVal == "table" then
+        local mt = getmetatable(val)
+        return mt and type(mt.__call) == "function" or false
+    end
+
+    return false
 end
 
 ---@param conditionFunc function A function that is repeatedly called until it returns a truthy value or the timeout is exceeded.
