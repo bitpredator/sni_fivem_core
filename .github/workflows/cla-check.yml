@@ -103,5 +103,3 @@ jobs:
           }
 
           Write-Host "✅ CLA accepted"
-
-
