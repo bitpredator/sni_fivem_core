@@ -46,145 +46,134 @@ function ESX.RegisterCommand(name, group, cb, allowConsole, suggestion)
     end
 
     if suggestion then
-        if not suggestion.arguments then
-            suggestion.arguments = {}
-        end
-        if not suggestion.help then
-            suggestion.help = ""
-        end
+        suggestion.arguments = suggestion.arguments or {}
+        suggestion.help = suggestion.help or ""
 
         TriggerClientEvent("chat:addSuggestion", -1, ("/%s"):format(name), suggestion.help, suggestion.arguments)
     end
 
-    Core.RegisteredCommands[name] = { group = group, cb = cb, allowConsole = allowConsole, suggestion = suggestion }
+    Core.RegisteredCommands[name] = {
+        group = group,
+        cb = cb,
+        allowConsole = allowConsole,
+        suggestion = suggestion,
+    }
 
     RegisterCommand(name, function(playerId, args)
         local command = Core.RegisteredCommands[name]
 
         if not command.allowConsole and playerId == 0 then
             print(("[^3WARNING^7] ^5%s^0"):format(TranslateCap("commanderror_console")))
-        else
-            local xPlayer, err = ESX.Players[playerId], nil
+            return
+        end
 
-            if command.suggestion then
-                if command.suggestion.validate then
-                    if #args ~= #command.suggestion.arguments then
-                        err = TranslateCap("commanderror_argumentmismatch", #args, #command.suggestion.arguments)
-                    end
-                end
+        local xPlayer = ESX.Players[playerId]
+        local err = nil
 
-                if not err and command.suggestion.arguments then
-                    local newArgs = {}
-
-                    for k, v in ipairs(command.suggestion.arguments) do
-                        if v.type then
-                            if v.type == "number" then
-                                local newArg = tonumber(args[k])
-
-                                if newArg then
-                                    newArgs[v.name] = newArg
-                                else
-                                    err = TranslateCap("commanderror_argumentmismatch_number", k)
-                                end
-                            elseif v.type == "player" or v.type == "playerId" then
-                                local targetPlayer = tonumber(args[k])
-
-                                if args[k] == "me" then
-                                    targetPlayer = playerId
-                                end
-
-                                if targetPlayer then
-                                    local xTargetPlayer = ESX.GetPlayerFromId(targetPlayer)
-
-                                    if xTargetPlayer then
-                                        if v.type == "player" then
-                                            newArgs[v.name] = xTargetPlayer
-                                        else
-                                            newArgs[v.name] = targetPlayer
-                                        end
-                                    else
-                                        err = TranslateCap("commanderror_invalidplayerid")
-                                    end
-                                else
-                                    err = TranslateCap("commanderror_argumentmismatch_number", k)
-                                end
-                            elseif v.type == "string" then
-                                local newArg = tonumber(args[k])
-                                if not newArg then
-                                    newArgs[v.name] = args[k]
-                                else
-                                    err = TranslateCap("commanderror_argumentmismatch_string", k)
-                                end
-                            elseif v.type == "item" then
-                                if ESX.Items[args[k]] then
-                                    newArgs[v.name] = args[k]
-                                else
-                                    err = TranslateCap("commanderror_invaliditem")
-                                end
-                            elseif v.type == "weapon" then
-                                if ESX.GetWeapon(args[k]) then
-                                    newArgs[v.name] = string.upper(args[k])
-                                else
-                                    err = TranslateCap("commanderror_invalidweapon")
-                                end
-                            elseif v.type == "any" then
-                                newArgs[v.name] = args[k]
-                            elseif v.type == "merge" then
-                                local length = 0
-                                for i = 1, k - 1 do
-                                    length = length + string.len(args[i]) + 1
-                                end
-                                local merge = table.concat(args, " ")
-
-                                newArgs[v.name] = string.sub(merge, length)
-                            elseif v.type == "coordinate" then
-                                local coord = tonumber(args[k]:match("(-?%d+%.?%d*)"))
-                                if not coord then
-                                    err = TranslateCap("commanderror_argumentmismatch_number", k)
-                                else
-                                    newArgs[v.name] = coord
-                                end
-                            end
-                        end
-                        
-                        if ESX.IsFunctionReference(v.Validator?.validate) and not err then
-                            local candidate = newArgs[v.name]
-                            local ok, res = pcall(v.Validator.validate, candidate)
-                            if not ok or res ~= true then
-                                err = v.Validator.err or TranslateCap("commanderror_argumentmismatch")
-                            end
-                        end
-
-                        --backwards compatibility
-                        if v.validate ~= nil and not v.validate then
-                            err = nil
-                        end
-
-                        if err then
-                            break
-                        end
-                    end
-
-                    args = newArgs
-                end
+        if command.suggestion then
+            if command.suggestion.validate and #args ~= #command.suggestion.arguments then
+                err = TranslateCap("commanderror_argumentmismatch", #args, #command.suggestion.arguments)
             end
 
-            if err then
-                if playerId == 0 then
-                    print(("[^3WARNING^7] %s^7"):format(err))
-                else
-                    xPlayer.showNotification(err)
-                end
-            else
-                cb(xPlayer or false, args, function(msg)
-                    if playerId == 0 then
-                        print(("[^3WARNING^7] %s^7"):format(msg))
-                    else
-                        xPlayer.showNotification(msg)
+            if not err and command.suggestion.arguments then
+                local newArgs = {}
+
+                for k, v in ipairs(command.suggestion.arguments) do
+                    local arg = args[k]
+
+                    if v.type == "number" then
+                        local n = tonumber(arg)
+                        if n then
+                            newArgs[v.name] = n
+                        else
+                            err = TranslateCap("commanderror_argumentmismatch_number", k)
+                        end
+                    elseif v.type == "player" or v.type == "playerId" then
+                        local target = arg == "me" and playerId or tonumber(arg)
+
+                        if target then
+                            local xTarget = ESX.GetPlayerFromId(target)
+                            if xTarget then
+                                newArgs[v.name] = (v.type == "player") and xTarget or target
+                            else
+                                err = TranslateCap("commanderror_invalidplayerid")
+                            end
+                        else
+                            err = TranslateCap("commanderror_argumentmismatch_number", k)
+                        end
+                    elseif v.type == "string" then
+                        if not tonumber(arg) then
+                            newArgs[v.name] = arg
+                        else
+                            err = TranslateCap("commanderror_argumentmismatch_string", k)
+                        end
+                    elseif v.type == "item" then
+                        if ESX.Items[arg] then
+                            newArgs[v.name] = arg
+                        else
+                            err = TranslateCap("commanderror_invaliditem")
+                        end
+                    elseif v.type == "weapon" then
+                        if ESX.GetWeapon(arg) then
+                            newArgs[v.name] = string.upper(arg)
+                        else
+                            err = TranslateCap("commanderror_invalidweapon")
+                        end
+                    elseif v.type == "any" then
+                        newArgs[v.name] = arg
+                    elseif v.type == "merge" then
+                        local offset = 0
+                        for i = 1, k - 1 do
+                            offset = offset + #args[i] + 1
+                        end
+                        newArgs[v.name] = string.sub(table.concat(args, " "), offset)
+                    elseif v.type == "coordinate" then
+                        local coord = tonumber(arg:match("(-?%d+%.?%d*)"))
+                        if coord then
+                            newArgs[v.name] = coord
+                        else
+                            err = TranslateCap("commanderror_argumentmismatch_number", k)
+                        end
                     end
-                end)
+
+                    -- ESX Validator (Lua-safe, no JS syntax)
+                    if not err and type(v.Validator) == "table" and ESX.IsFunctionReference(v.Validator.validate) then
+                        local ok, res = pcall(v.Validator.validate, newArgs[v.name])
+                        if not ok or res ~= true then
+                            err = v.Validator.err or TranslateCap("commanderror_argumentmismatch")
+                        end
+                    end
+
+                    -- backwards compatibility ESX
+                    if v.validate ~= nil and v.validate == false then
+                        err = nil
+                    end
+
+                    if err then
+                        break
+                    end
+                end
+
+                args = newArgs
             end
         end
+
+        if err then
+            if playerId == 0 then
+                print(("[^3WARNING^7] %s^7"):format(err))
+            else
+                xPlayer.showNotification(err)
+            end
+            return
+        end
+
+        cb(xPlayer or false, args, function(msg)
+            if playerId == 0 then
+                print(("[^3WARNING^7] %s^7"):format(msg))
+            else
+                xPlayer.showNotification(msg)
+            end
+        end)
     end, true)
 
     if type(group) == "table" then
@@ -224,19 +213,15 @@ function Core.SavePlayer(xPlayer, cb)
         xPlayer.identifier,
     }
 
-    MySQL.prepare(
-        "UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ?, `metadata` = ? WHERE `identifier` = ?",
-        parameters,
-        function(affectedRows)
-            if affectedRows == 1 then
-                print(('[^2INFO^7] Saved player ^5"%s^7"'):format(xPlayer.name))
-                TriggerEvent("esx:playerSaved", xPlayer.playerId, xPlayer)
-            end
-            if cb then
-                cb()
-            end
+    MySQL.prepare("UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ?, `metadata` = ? WHERE `identifier` = ?", parameters, function(affectedRows)
+        if affectedRows == 1 then
+            print(('[^2INFO^7] Saved player ^5"%s^7"'):format(xPlayer.name))
+            TriggerEvent("esx:playerSaved", xPlayer.playerId, xPlayer)
         end
-    )
+        if cb then
+            cb()
+        end
+    end)
 end
 
 ---@param cb? function
@@ -265,22 +250,17 @@ function Core.SavePlayers(cb)
         }
     end
 
-    MySQL.prepare(
-        "UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ?, `metadata` = ? WHERE `identifier` = ?",
-        parameters,
-        function(results)
-            if not results then
-                return
-            end
-
-            if type(cb) == "function" then
-                return cb()
-            end
-
-            print(("[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms"):format(#parameters,
-                #parameters > 1 and "players" or "player", ESX.Math.Round((os.time() - startTime) / 1000000, 2)))
+    MySQL.prepare("UPDATE `users` SET `accounts` = ?, `job` = ?, `job_grade` = ?, `group` = ?, `position` = ?, `inventory` = ?, `loadout` = ?, `metadata` = ? WHERE `identifier` = ?", parameters, function(results)
+        if not results then
+            return
         end
-    )
+
+        if type(cb) == "function" then
+            return cb()
+        end
+
+        print(("[^2INFO^7] Saved ^5%s^7 %s over ^5%s^7 ms"):format(#parameters, #parameters > 1 and "players" or "player", ESX.Math.Round((os.time() - startTime) / 1000000, 2)))
+    end)
 end
 
 ESX.GetPlayers = GetPlayers
@@ -460,8 +440,7 @@ function ESX.DiscordLog(name, title, color, message)
             ["color"] = Config.DiscordLogs.Colors[color] or Config.DiscordLogs.Colors.default,
             ["footer"] = {
                 ["text"] = "| ESX Logs | " .. os.date(),
-                ["icon_url"] =
-                "https://cdn.discordapp.com/attachments/944789399852417096/1020099828266586193/blanc-800x800.png",
+                ["icon_url"] = "https://cdn.discordapp.com/attachments/944789399852417096/1020099828266586193/blanc-800x800.png",
             },
             ["description"] = message,
             ["author"] = {
@@ -504,8 +483,7 @@ function ESX.DiscordLogFields(name, title, color, fields)
             ["color"] = Config.DiscordLogs.Colors[color] or Config.DiscordLogs.Colors.default,
             ["footer"] = {
                 ["text"] = "| ESX Logs | " .. os.date(),
-                ["icon_url"] =
-                "https://cdn.discordapp.com/attachments/944789399852417096/1020099828266586193/blanc-800x800.png",
+                ["icon_url"] = "https://cdn.discordapp.com/attachments/944789399852417096/1020099828266586193/blanc-800x800.png",
             },
             ["fields"] = fields,
             ["description"] = "",
@@ -590,9 +568,7 @@ function ESX.UseItem(source, item, ...)
             local success, result = pcall(itemCallback, source, item, ...)
 
             if not success then
-                return result and print(result) or
-                print(('[^3WARNING^7] An error occured when using item ^5"%s"^7! This was not caused by ESX.'):format(
-                item))
+                return result and print(result) or print(('[^3WARNING^7] An error occured when using item ^5"%s"^7! This was not caused by ESX.'):format(item))
             end
         end
     else
@@ -736,8 +712,7 @@ if not Config.CustomInventory then
         local itemCount = #items
         for i = 1, itemCount do
             local item = items[i]
-            ESX.Items[item.name] = { label = item.label, weight = item.weight, rare = item.rare, canRemove = item
-            .can_remove }
+            ESX.Items[item.name] = { label = item.label, weight = item.weight, rare = item.rare, canRemove = item.can_remove }
         end
         refreshPlayerInventories()
 
@@ -751,6 +726,8 @@ if not Config.CustomInventory then
 
         for i = 1, #items do
             local item = items[i]
+            local valid = true
+
             local name = item.name
             local label = item.label
             local weight = item.weight or 1
@@ -759,49 +736,37 @@ if not Config.CustomInventory then
 
             if type(name) ~= "string" then
                 print(("^1[AddItems]^0 Invalid item name: %s"):format(name))
-                goto continue
-            end
-
-            if ESX.Items[name] then
-                goto continue
-            end
-
-            if type(label) ~= "string" then
+                valid = false
+            elseif ESX.Items[name] then
+                valid = false
+            elseif type(label) ~= "string" then
                 print(("^1[AddItems]^0 Invalid label for item '%s'"):format(name))
-                goto continue
-            end
-
-            if type(weight) ~= "number" then
+                valid = false
+            elseif type(weight) ~= "number" then
                 print(("^1[AddItems]^0 Invalid weight for item '%s'"):format(name))
-                goto continue
-            end
-
-            if type(rare) ~= "boolean" then
+                valid = false
+            elseif type(rare) ~= "boolean" then
                 print(("^1[AddItems]^0 Invalid rare flag for item '%s'"):format(name))
-                goto continue
-            end
-
-            if type(canRemove) ~= "boolean" then
+                valid = false
+            elseif type(canRemove) ~= "boolean" then
                 print(("^1[AddItems]^0 Invalid canRemove flag for item '%s'"):format(name))
-                goto continue
+                valid = false
             end
 
-            toInsert[toInsertIndex] = {
-                name = name,
-                label = label,
-                weight = weight,
-                rare = rare,
-                canRemove = canRemove,
-            }
-            toInsertIndex += 1
-
-            ::continue::
+            if valid then
+                toInsert[toInsertIndex] = {
+                    name = name,
+                    label = label,
+                    weight = weight,
+                    rare = rare,
+                    canRemove = canRemove,
+                }
+                toInsertIndex += 1
+            end
         end
 
         if #toInsert > 0 then
-            MySQL.prepare.await(
-            "INSERT IGNORE INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES (?, ?, ?, ?, ?)",
-                toInsert)
+            MySQL.prepare.await("INSERT IGNORE INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES (?, ?, ?, ?, ?)", toInsert)
 
             for i = 1, #toInsert do
                 local row = toInsert[i]
@@ -836,7 +801,9 @@ function Core.IsPlayerAdmin(playerSrc)
         return false
     end
 
-    if IsPlayerAceAllowed(playerSrc --[[@as string]], "command") or GetConvar("sv_lan", "") == "true" then
+    if
+        IsPlayerAceAllowed(playerSrc --[[@as string]], "command") or GetConvar("sv_lan", "") == "true"
+    then
         return true
     end
 
@@ -851,7 +818,7 @@ function Core.generateSSN(skipUniqueCheck)
     local reservedSSNs = {
         ["078-05-1120"] = true,
         ["219-09-9999"] = true,
-        ["123-45-6789"] = true
+        ["123-45-6789"] = true,
     }
 
     while true do
