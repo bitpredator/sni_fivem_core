@@ -7,10 +7,12 @@ on:
       - edited
       - synchronize
       - reopened
+      - ready_for_review
 
 permissions:
   pull-requests: write
   issues: write
+  contents: read
 
 jobs:
   cla-check:
@@ -18,8 +20,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-            - name: Check CLA acceptance (PowerShell)
-        shell: pwsh
+      - name: Check CLA acceptance (Windows PowerShell)
+        shell: powershell
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -43,7 +45,7 @@ jobs:
           $headers = @{
             Authorization = "Bearer $env:GITHUB_TOKEN"
             Accept        = "application/vnd.github+json"
-            "User-Agent"  = "SNI-CLA-Check"
+            "User-Agent"  = "CLA-Check-Bot"
           }
 
           # ================================
@@ -56,12 +58,12 @@ jobs:
               -Method Get
           }
           catch {
-            Write-Error "Failed to fetch PR comments from GitHub API."
+            Write-Error "Failed to fetch PR comments."
             throw
           }
 
           # ================================
-          # Validate CLA acceptance
+          # Check CLA acceptance
           # ================================
           $accepted = $false
 
@@ -73,19 +75,30 @@ jobs:
             }
           }
 
+          # ================================
+          # If not accepted → comment + fail
+          # ================================
           if (-not $accepted) {
-            Write-Error @"
-           ❌ CLA NOT ACCEPTED
 
-           The contributor must comment the following EXACT sentence on this Pull Request:
+            $botComment = @"
+          **CLA not accepted**
 
-          I have read and agree to the CLA
+          Per poter unire questa Pull Request devi commentare **esattamente** la seguente frase:
+          To merge this Pull Request you must comment **exactly** the following sentence:
+            
+          CLA:
+          https://github.com/$REPO/blob/main/CLA.md
 
-CLA document:
-         https://github.com/$REPO/blob/main/CLA.md
+          Once the comment is added, this check will automatically pass.
+          "@
 
-  Once the comment is added, this check will automatically pass.
-  "@
+            Invoke-RestMethod `
+              -Uri "https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments" `
+              -Headers $headers `
+              -Method Post `
+              -Body (@{ body = $botComment } | ConvertTo-Json -Depth 5)
+
+            Write-Error "CLA not accepted"
             exit 1
           }
 
