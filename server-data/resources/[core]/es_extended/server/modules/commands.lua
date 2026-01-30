@@ -313,10 +313,17 @@ if not Config.CustomInventory then
             arguments = {
                 { name = "playerId", help = TranslateCap("commandgeneric_playerid"), type = "player" },
                 { name = "item", help = TranslateCap("command_giveitem_item"), type = "item" },
-                { name = "count", help = TranslateCap("command_giveitem_count"), type = "number", Validator = {
-                    validate = function(x) return x > 0 end,
-                    err = TranslateCap("commanderror_argumentmismatch_positive_number", "count")
-                }},
+                {
+                    name = "count",
+                    help = TranslateCap("command_giveitem_count"),
+                    type = "number",
+                    Validator = {
+                        validate = function(x)
+                            return x > 0
+                        end,
+                        err = TranslateCap("commanderror_argumentmismatch_positive_number", "count"),
+                    },
+                },
             },
         }
     )
@@ -561,7 +568,7 @@ ESX.RegisterCommand("group", { "user", "admin" }, function(xPlayer, _, _)
 end, true)
 
 ESX.RegisterCommand("job", { "user", "admin" }, function(xPlayer, _, _)
-	local job = xPlayer.getJob()
+    local job = xPlayer.getJob()
 
     print(("%s, your job is: ^5%s^0 - ^5%s^0 - ^5%s^0"):format(xPlayer.getName(), job.name, job.grade_label, job.onDuty and "On Duty" or "Off Duty"))
 end, false)
@@ -749,7 +756,7 @@ ESX.RegisterCommand("players", "admin", function()
 end, true)
 
 ESX.RegisterCommand(
-    {"setdim", "setbucket"},
+    { "setdim", "setbucket" },
     "admin",
     function(xPlayer, args)
         SetPlayerRoutingBucket(args.playerId.source, args.dimension)

@@ -138,7 +138,7 @@ AddStateBagChangeHandler("VehicleProperties", nil, function(bagName, _, value)
     end
 
     local tries = 0
-    
+
     while not NetworkDoesEntityExistWithNetworkId(netId) do
         Wait(200)
         tries = tries + 1
@@ -218,7 +218,6 @@ if not Config.CustomInventory then
     RegisterNetEvent("esx:addWeapon", function()
         error("event ^5'esx:addWeapon'^1 Has Been Removed. Please use ^5xPlayer.addWeapon^1 Instead!")
     end)
-
 
     RegisterNetEvent("esx:addWeaponComponent", function()
         error("event ^5'esx:addWeaponComponent'^1 Has Been Removed. Please use ^5xPlayer.addWeaponComponent^1 Instead!")
@@ -310,7 +309,9 @@ if not Config.CustomInventory then
 end
 
 function StartServerSyncLoops()
-    if Config.CustomInventory then return end
+    if Config.CustomInventory then
+        return
+    end
 
     local currentWeapon = {
         ---@type number
@@ -360,7 +361,9 @@ function StartServerSyncLoops()
             if parachuteState == PARACHUTE_OPENING or parachuteState == PARACHUTE_OPEN then
                 TriggerServerEvent("esx:updateWeaponAmmo", "GADGET_PARACHUTE", 0)
 
-                while GetPedParachuteState(ESX.PlayerData.ped) ~= -1 do Wait(1000) end
+                while GetPedParachuteState(ESX.PlayerData.ped) ~= -1 do
+                    Wait(1000)
+                end
             end
             Wait(500)
         end
@@ -597,8 +600,8 @@ ESX.RegisterClientCallback("esx:GetVehicleType", function(cb, model)
     cb(ESX.GetVehicleTypeClient(model))
 end)
 
-ESX.SecureNetEvent('esx:updatePlayerData', function(key, val)
-	ESX.SetPlayerData(key, val)
+ESX.SecureNetEvent("esx:updatePlayerData", function(key, val)
+    ESX.SetPlayerData(key, val)
 end)
 
 ---@param command string

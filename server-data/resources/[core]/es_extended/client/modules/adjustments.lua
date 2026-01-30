@@ -69,7 +69,7 @@ function Adjustments:DispatchServices()
         for i = 1, 15 do
             EnableDispatchService(i, false)
         end
-        SetAudioFlag('PoliceScannerDisabled', true)
+        SetAudioFlag("PoliceScannerDisabled", true)
     end
 end
 
@@ -128,7 +128,7 @@ function Adjustments:NPCScenarios()
             "WORLD_HUMAN_PAPARAZZI",
         }
 
-        for i=1, #scenarios do
+        for i = 1, #scenarios do
             SetScenarioTypeEnabled(scenarios[i], false)
         end
     end
@@ -161,7 +161,9 @@ local placeHolders = {
         return ESX.serverId
     end,
     player_street = function()
-        if not ESX.PlayerData.ped then return "Unknown" end
+        if not ESX.PlayerData.ped then
+            return "Unknown"
+        end
 
         local playerCoords = GetEntityCoords(ESX.PlayerData.ped)
         local streetHash = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
@@ -215,7 +217,7 @@ end
 function Adjustments:DisableRadio()
     if Config.RemoveHudComponents[16] then
         AddEventHandler("esx:enteredVehicle", function(vehicle, plate, seat, displayName, netId)
-            SetVehRadioStation(vehicle,"OFF")
+            SetVehRadioStation(vehicle, "OFF")
             SetUserRadioControlEnabled(false)
         end)
     end

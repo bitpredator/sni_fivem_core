@@ -13,7 +13,7 @@ client_scripts({ "Config.lua", "Notify.lua" })
 ui_page("nui/index.html")
 
 files({
-  "nui/index.html",
-  "nui/js/*.js",
-  "nui/css/*.css",
+    "nui/index.html",
+    "nui/js/*.js",
+    "nui/css/*.css",
 })

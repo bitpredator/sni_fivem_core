@@ -422,5 +422,5 @@ return {
     ["tint_metallic_green"] = "金属绿",
     ["tint_metallic_blue"] = "金属蓝",
     ["tint_metallic_white_aqua"] = "金属白水色",
-    ["tint_metallic_red_yellow"] = "金属红黄色"
+    ["tint_metallic_red_yellow"] = "金属红黄色",
 }

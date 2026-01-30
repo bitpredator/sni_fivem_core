@@ -19,7 +19,7 @@ local function TrackPedCoordsOnce()
             local coords = GetEntityCoords(ESX.PlayerData.ped)
 
             return coords
-        end
+        end,
     })
 end
 
@@ -35,7 +35,9 @@ if not IsDuplicityVersion() then -- Only register this event for the client
 
     RegisterNetEvent("esx:playerLoaded", function(xPlayer)
         ESX.PlayerData = xPlayer
-        while not ESX.PlayerData.ped or not DoesEntityExist(ESX.PlayerData.ped) do Wait(0) end
+        while not ESX.PlayerData.ped or not DoesEntityExist(ESX.PlayerData.ped) do
+            Wait(0)
+        end
         ESX.PlayerLoaded = true
 
         TrackPedCoordsOnce()
@@ -94,15 +96,15 @@ if not IsDuplicityVersion() then -- Only register this event for the client
 
         local file = LoadResourceFile("es_extended", path)
         if file then
-            local fn, err = load(file, ('@@es_extended/%s'):format(path))
+            local fn, err = load(file, ("@@es_extended/%s"):format(path))
 
             if not fn or err then
-                return error(('\n^1Error importing module (%s)'):format(external[i]))
+                return error(("\n^1Error importing module (%s)"):format(external[i]))
             end
 
             ESX[module[1]] = fn()
         else
-            return error(('\n^1Error loading module (%s)'):format(external[i]))
+            return error(("\n^1Error loading module (%s)"):format(external[i]))
         end
     end
 else
@@ -114,7 +116,7 @@ else
                 return function(...)
                     return exports.es_extended:RunStaticPlayerMethod(self.src, method, ...)
                 end
-            end
+            end,
         })
     end
 
@@ -123,7 +125,9 @@ else
     function ESX.Player(src)
         if type(src) ~= "number" then
             src = ESX.GetPlayerIdFromIdentifier(src)
-            if not src then return end
+            if not src then
+                return
+            end
         elseif not ESX.IsPlayerLoaded(src) then
             return
         end
@@ -164,20 +168,20 @@ if GetResourceState("ox_lib") == "missing" then
     local _require = require
 
     package = {
-        path = './?.lua;./?/init.lua',
+        path = "./?.lua;./?/init.lua",
         preload = {},
         loaded = setmetatable({}, {
             __index = loaded,
             __newindex = function() end,
             __metatable = false,
-        })
+        }),
     }
 
     ---@param modName string
     ---@return string
     ---@return string
     local function getModuleInfo(modName)
-        local resource = modName:match('^@(.-)/.+') --[[@as string?]]
+        local resource = modName:match("^@(.-)/.+") --[[@as string?]]
 
         if resource then
             return resource, modName:sub(#resource + 3)
@@ -186,16 +190,16 @@ if GetResourceState("ox_lib") == "missing" then
         local idx = 4 -- call stack depth (kept slightly lower than expected depth "just in case")
 
         while true do
-            local dbgInfo = debug.getinfo(idx, 'S')
+            local dbgInfo = debug.getinfo(idx, "S")
             local src = dbgInfo and dbgInfo.source
 
             if not src then
                 return ESX.currentResourceName, modName
             end
 
-            resource = src:match('^@@([^/]+)/.+')
+            resource = src:match("^@@([^/]+)/.+")
 
-            if resource and not src:find('^@@es_extended/imports') then
+            if resource and not src:find("^@@es_extended/imports") then
                 return resource, modName
             end
 
@@ -211,11 +215,11 @@ if GetResourceState("ox_lib") == "missing" then
     ---@return string? errmsg
     ---@diagnostic disable-next-line: duplicate-set-field
     function package.searchpath(name, path)
-        local resource, modName = getModuleInfo(name:gsub('%.', '/'))
+        local resource, modName = getModuleInfo(name:gsub("%.", "/"))
         local tried = {}
 
-        for template in path:gmatch('[^;]+') do
-            local fileName = template:gsub('^%./', ''):gsub('?', modName:gsub('%.', '/') or modName)
+        for template in path:gmatch("[^;]+") do
+            local fileName = template:gsub("^%./", ""):gsub("?", modName:gsub("%.", "/") or modName)
             local file = LoadResourceFile(resource, fileName)
 
             if file then
@@ -242,10 +246,10 @@ if GetResourceState("ox_lib") == "missing" then
             local resource = tempData[2]
 
             ESX.Table.Wipe(tempData)
-            return assert(load(file, ('@@%s/%s'):format(resource, fileName), 't', env or _ENV))
+            return assert(load(file, ("@@%s/%s"):format(resource, fileName), "t", env or _ENV))
         end
 
-        return nil, err or 'unknown error'
+        return nil, err or "unknown error"
     end
 
     ---@diagnostic disable-next-line: duplicate-doc-alias
@@ -258,7 +262,9 @@ if GetResourceState("ox_lib") == "missing" then
         function(modName)
             local ok, result = pcall(_require, modName)
 
-            if ok then return result end
+            if ok then
+                return result
+            end
 
             return ok, result
         end,
@@ -269,7 +275,9 @@ if GetResourceState("ox_lib") == "missing" then
 
             return nil, ("no field package.preload['%s']"):format(modName)
         end,
-        function(modName) return loadModule(modName) end,
+        function(modName)
+            return loadModule(modName)
+        end,
     }
 
     ---@param filePath string
@@ -277,13 +285,15 @@ if GetResourceState("ox_lib") == "missing" then
     ---@return unknown
     ---Loads and runs a Lua file at the given path. Unlike require, the chunk is not cached for future use.
     function ESX.load(filePath, env)
-        if type(filePath) ~= 'string' then
+        if type(filePath) ~= "string" then
             error(("file path must be a string (received '%s')"):format(filePath), 2)
         end
 
         local result, err = loadModule(filePath, env)
 
-        if result then return result() end
+        if result then
+            return result()
+        end
 
         error(("file '%s' not found\n\t%s"):format(filePath, err))
     end
@@ -292,12 +302,12 @@ if GetResourceState("ox_lib") == "missing" then
     ---@return table
     ---Loads and decodes a json file at the given path.
     function ESX.loadJson(filePath)
-        if type(filePath) ~= 'string' then
+        if type(filePath) ~= "string" then
             error(("file path must be a string (received '%s')"):format(filePath), 2)
         end
 
-        local resourceSrc, modPath = getModuleInfo(filePath:gsub('%.', '/'))
-        local resourceFile = LoadResourceFile(resourceSrc, ('%s.json'):format(modPath))
+        local resourceSrc, modPath = getModuleInfo(filePath:gsub("%.", "/"))
+        local resourceFile = LoadResourceFile(resourceSrc, ("%s.json"):format(modPath))
 
         if resourceFile then
             return json.decode(resourceFile)
@@ -311,26 +321,30 @@ if GetResourceState("ox_lib") == "missing" then
     ---@param modName string
     ---@return unknown
     function ESX.require(modName)
-        if type(modName) ~= 'string' then
+        if type(modName) ~= "string" then
             error(("module name must be a string (received '%s')"):format(modName), 3)
         end
 
         local module = loaded[modName]
 
-        if module == '__loading' then
+        if module == "__loading" then
             error(("^1circular-dependency occurred when loading module '%s'^0"):format(modName), 2)
         end
 
-        if module ~= nil then return module end
+        if module ~= nil then
+            return module
+        end
 
-        loaded[modName] = '__loading'
+        loaded[modName] = "__loading"
 
         local err = {}
 
         for i = 1, #package.searchers do
             local result, errMsg = package.searchers[i](modName)
             if result then
-                if type(result) == 'function' then result = result() end
+                if type(result) == "function" then
+                    result = result()
+                end
                 loaded[modName] = result or result == nil
 
                 return loaded[modName]

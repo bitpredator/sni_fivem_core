@@ -31,9 +31,7 @@ local function createESXPlayer(identifier, playerId, data)
         print(("[^2INFO^0] Player ^5%s^0 Has been granted admin permissions via ^5Ace Perms^7."):format(playerId))
         defaultGroup = "admin"
     end
-    local parameters = Config.Multichar and
-        { json.encode(accounts), identifier, Core.generateSSN(), defaultGroup, data.firstname, data.lastname, data.dateofbirth, data.sex, data.height }
-        or { json.encode(accounts), identifier, Core.generateSSN(), defaultGroup }
+    local parameters = Config.Multichar and { json.encode(accounts), identifier, Core.generateSSN(), defaultGroup, data.firstname, data.lastname, data.dateofbirth, data.sex, data.height } or { json.encode(accounts), identifier, Core.generateSSN(), defaultGroup }
 
     if Config.StartingInventoryItems then
         table.insert(parameters, json.encode(Config.StartingInventoryItems))
@@ -44,7 +42,6 @@ local function createESXPlayer(identifier, playerId, data)
     end)
 end
 
-
 local function onPlayerJoined(playerId)
     local identifier = ESX.GetIdentifier(playerId)
     if not identifier then
@@ -54,9 +51,7 @@ local function onPlayerJoined(playerId)
     if ESX.GetPlayerFromIdentifier(identifier) then
         DropPlayer(
             playerId,
-            ("there was an error loading your character!\nError code: identifier-active-ingame\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same Rockstar account.\n\nYour Rockstar identifier: %s"):format(
-                identifier
-            )
+            ("there was an error loading your character!\nError code: identifier-active-ingame\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same Rockstar account.\n\nYour Rockstar identifier: %s"):format(identifier)
         )
     else
         local result = MySQL.scalar.await("SELECT 1 FROM users WHERE identifier = ?", { identifier })
@@ -76,7 +71,7 @@ local function onPlayerDropped(playerId, reason, cb)
     local function resolve()
         if cb then
             return cb()
-        elseif(p) then
+        elseif p then
             return p:resolve()
         end
     end
@@ -106,7 +101,6 @@ local function onPlayerDropped(playerId, reason, cb)
     end
 end
 AddEventHandler("esx:onPlayerDropped", onPlayerDropped)
-
 
 if Config.Multichar then
     AddEventHandler("esx:onPlayerJoined", function(src, char, data)
@@ -142,13 +136,13 @@ if not Config.Multichar then
         deferrals.defer()
         Wait(0) -- Required
         local identifier
-        local correctLicense, _ = pcall(function ()
+        local correctLicense, _ = pcall(function()
             identifier = ESX.GetIdentifier(playerId)
         end)
 
         -- luacheck: ignore
         if not SetEntityOrphanMode then
-            return deferrals.done(("[ESX] ESX Requires a minimum Artifact version of 10188, Please update your server."))
+            return deferrals.done("[ESX] ESX Requires a minimum Artifact version of 10188, Please update your server.")
         end
 
         if oneSyncState == "off" or oneSyncState == "legacy" then
@@ -171,7 +165,9 @@ if not Config.Multichar then
             return deferrals.done()
         end
 
-        if GetPlayerPing(xPlayer.source --[[@as string]]) > 0 then
+        if
+            GetPlayerPing(xPlayer.source --[[@as string]]) > 0
+        then
             return deferrals.done(
                 ("[ESX] There was an error loading your character!\nError code: identifier-active\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same account.\n\nYour identifier: %s"):format(identifier)
             )
@@ -285,7 +281,6 @@ function loadESXPlayer(identifier, playerId, isNew)
     -- Loadout
     if not Config.CustomInventory then
         if result.loadout and result.loadout ~= "" then
-
             local loadout = json.decode(result.loadout)
             for name, weapon in pairs(loadout) do
                 local label = ESX.GetWeaponLabel(name)
@@ -304,7 +299,7 @@ function loadESXPlayer(identifier, playerId, isNew)
     end
 
     -- Position
-    userData.coords = json.decode(result.position) or Config.DefaultSpawns[ESX.Math.Random(1,#Config.DefaultSpawns)]
+    userData.coords = json.decode(result.position) or Config.DefaultSpawns[ESX.Math.Random(1, #Config.DefaultSpawns)]
 
     -- Skin
     userData.skin = (result.skin and result.skin ~= "") and json.decode(result.skin) or { sex = userData.sex == "f" and 1 or 0 }
@@ -382,7 +377,7 @@ AddEventHandler("esx:playerLoaded", function(_, xPlayer, isNew)
     Core.JobsPlayerCount[job] = (Core.JobsPlayerCount[job] or 0) + 1
     GlobalState[jobKey] = Core.JobsPlayerCount[job]
     if isNew then
-        Player(xPlayer.source).state:set('isNew', true, false)
+        Player(xPlayer.source).state:set("isNew", true, false)
     end
 end)
 
@@ -513,7 +508,9 @@ if not Config.CustomInventory then
 
             local _, weaponObject = ESX.GetWeapon(itemName)
 
-            if not weaponObject.ammo then return end
+            if not weaponObject.ammo then
+                return
+            end
 
             local ammoLabel = weaponObject.ammo.label
             if weapon.ammo >= itemCount then
@@ -573,7 +570,9 @@ if not Config.CustomInventory then
         elseif itemType == "item_weapon" then
             itemName = string.upper(itemName)
 
-            if not xPlayer.hasWeapon(itemName) then return end
+            if not xPlayer.hasWeapon(itemName) then
+                return
+            end
 
             local _, weapon = xPlayer.getWeapon(itemName)
             if not weapon then
@@ -623,7 +622,9 @@ if not Config.CustomInventory then
             return
         end
 
-        if not pickup then return end
+        if not pickup then
+            return
+        end
 
         local playerPickupDistance = #(pickup.coords - xPlayer.getCoords(true))
         if playerPickupDistance > 5.0 then

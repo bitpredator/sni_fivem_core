@@ -14,7 +14,7 @@ end
 ---@return nil
 function ESX.SecureNetEvent(name, func)
     local invoker = GetInvokingResource()
-    local invokingResource = invoker and invoker ~= 'unknown' and invoker or 'es_extended'
+    local invokingResource = invoker and invoker ~= "unknown" and invoker or "es_extended"
     if not invokingResource then
         return
     end
@@ -24,7 +24,7 @@ function ESX.SecureNetEvent(name, func)
     end
 
     local event = RegisterNetEvent(name, function(...)
-        if source == '' then
+        if source == "" then
             return
         end
 
@@ -38,14 +38,14 @@ function ESX.SecureNetEvent(name, func)
 end
 
 local addonResourcesState = {
-    ['esx_progressbar'] = GetResourceState('esx_progressbar') ~= 'missing',
-    ['esx_notify'] = GetResourceState('esx_notify') ~= 'missing',
-    ['esx_textui'] = GetResourceState('esx_textui') ~= 'missing',
-    ['esx_context'] = GetResourceState('esx_context') ~= 'missing',
+    ["esx_progressbar"] = GetResourceState("esx_progressbar") ~= "missing",
+    ["esx_notify"] = GetResourceState("esx_notify") ~= "missing",
+    ["esx_textui"] = GetResourceState("esx_textui") ~= "missing",
+    ["esx_context"] = GetResourceState("esx_context") ~= "missing",
 }
 
 local function IsResourceFound(resource)
-	return addonResourcesState[resource] or error(('Resource [^5%s^1] is Missing!'):format(resource))
+    return addonResourcesState[resource] or error(("Resource [^5%s^1] is Missing!"):format(resource))
 end
 
 function ESX.DisableSpawnManager()
@@ -59,8 +59,8 @@ end
 ---@return table | number
 function ESX.SearchInventory(items, count)
     local item
-    if type(items) == 'string' then
-        item, items = items, {items}
+    if type(items) == "string" then
+        item, items = items, { items }
     end
 
     local data = {}
@@ -134,7 +134,7 @@ function ESX.SpawnPlayer(skin, coords, cb)
     end
 
     NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, 0, true)
-    TriggerEvent('playerSpawned', coords)
+    TriggerEvent("playerSpawned", coords)
     cb()
 end
 
@@ -143,11 +143,11 @@ end
 ---@param options? ProgressBarOptions
 ---@return boolean Success Whether the progress bar was successfully created or not
 function ESX.Progressbar(message, length, options)
-	return IsResourceFound('esx_progressbar') and exports['esx_progressbar']:Progressbar(message, length, options)
+    return IsResourceFound("esx_progressbar") and exports["esx_progressbar"]:Progressbar(message, length, options)
 end
 
 function ESX.CancelProgressbar()
-    return IsResourceFound('esx_progressbar') and exports['esx_progressbar']:CancelProgressbar()
+    return IsResourceFound("esx_progressbar") and exports["esx_progressbar"]:CancelProgressbar()
 end
 
 ---@param message string The message to show
@@ -157,16 +157,16 @@ end
 ---@param position? string The position of the notification
 ---@return nil
 function ESX.ShowNotification(message, notifyType, length, title, position)
-	return IsResourceFound('esx_notify') and exports['esx_notify']:Notify(notifyType or "info", length or 5000, message, title, position)
+    return IsResourceFound("esx_notify") and exports["esx_notify"]:Notify(notifyType or "info", length or 5000, message, title, position)
 end
 
 function ESX.TextUI(...)
-	return IsResourceFound('esx_textui') and exports['esx_textui']:TextUI(...)
+    return IsResourceFound("esx_textui") and exports["esx_textui"]:TextUI(...)
 end
 
 ---@return nil
 function ESX.HideUI()
-	return IsResourceFound('esx_textui') and exports['esx_textui']:HideUI()
+    return IsResourceFound("esx_textui") and exports["esx_textui"]:HideUI()
 end
 
 ---@param sender string
@@ -219,7 +219,7 @@ end
 ---@return nil
 function ESX.DrawMissionText(msg, time)
     ClearPrints()
-    BeginTextCommandPrint('STRING')
+    BeginTextCommandPrint("STRING")
     AddTextComponentSubstringPlayerName(msg)
     EndTextCommandPrint(time, true)
 end
@@ -227,23 +227,23 @@ end
 ---@param str string The string to hash
 ---@return string The hashed string
 function ESX.HashString(str)
-    return ('~INPUT_%s~'):format(('%x'):format(joaat(str) & 0x7fffffff + 2 ^ 31):upper())
+    return ("~INPUT_%s~"):format(("%x"):format(joaat(str) & 0x7fffffff + 2 ^ 31):upper())
 end
 
 function ESX.OpenContext(...)
-    return IsResourceFound('esx_context') and exports['esx_context']:Open(...)
+    return IsResourceFound("esx_context") and exports["esx_context"]:Open(...)
 end
 
 function ESX.PreviewContext(...)
-    return IsResourceFound('esx_context') and exports['esx_context']:Preview(...)
+    return IsResourceFound("esx_context") and exports["esx_context"]:Preview(...)
 end
 
 function ESX.CloseContext(...)
-    return IsResourceFound('esx_context') and exports['esx_context']:Close(...)
+    return IsResourceFound("esx_context") and exports["esx_context"]:Close(...)
 end
 
 function ESX.RefreshContext(...)
-    return IsResourceFound('esx_context') and exports['esx_context']:Refresh(...)
+    return IsResourceFound("esx_context") and exports["esx_context"]:Refresh(...)
 end
 
 ---@param command_name string The command name
@@ -253,13 +253,13 @@ end
 ---@param on_press function The function to call on press
 ---@param on_release? function The function to call on release
 function ESX.RegisterInput(command_name, label, input_group, key, on_press, on_release)
-	local command = on_release and '+' .. command_name or command_name
+    local command = on_release and "+" .. command_name or command_name
     RegisterCommand(command, on_press, false)
     Core.Input[command_name] = ESX.HashString(command)
     if on_release then
-        RegisterCommand('-' .. command_name, on_release, false)
+        RegisterCommand("-" .. command_name, on_release, false)
     end
-    RegisterKeyMapping(command, label or '', input_group or 'keyboard', key or '')
+    RegisterKeyMapping(command, label or "", input_group or "keyboard", key or "")
 end
 
 ---@param menuType string
@@ -478,7 +478,6 @@ end
 ---@param coords table | vector3 | vector4 The coords to teleport the entity to
 ---@param cb? function The callback function
 function ESX.Game.Teleport(entity, coords, cb)
-
     if DoesEntityExist(entity) then
         RequestCollisionAtCoord(coords.x, coords.y, coords.z)
         while not HasCollisionLoadedAroundEntity(entity) do
@@ -504,8 +503,8 @@ function ESX.Game.SpawnObject(object, coords, cb, networked)
 
     ESX.Streaming.RequestModel(model)
 
-	local obj = CreateObject(model, coords.x, coords.y, coords.z, networked == nil or networked, false, true)
-	return cb and cb(obj) or obj
+    local obj = CreateObject(model, coords.x, coords.y, coords.z, networked == nil or networked, false, true)
+    return cb and cb(obj) or obj
 end
 
 ---@param object integer | string The object to spawn
@@ -564,7 +563,7 @@ function ESX.Game.SpawnVehicle(vehicleModel, coords, heading, cb, networked)
                 promise:reject(("Tried to spawn invalid vehicle - ^5%s^7!"):format(model))
                 return
             end
-           error(("Tried to spawn invalid vehicle - ^5%s^7!"):format(model))
+            error(("Tried to spawn invalid vehicle - ^5%s^7!"):format(model))
         end
 
         local vehicle = CreateVehicle(model, vector.x, vector.y, vector.z, heading, isNetworked, true)
@@ -740,22 +739,22 @@ end
 ---@param shape integer The shape to get the test result from
 ---@return boolean, table, table, integer, integer
 function ESX.Game.GetShapeTestResultSync(shape)
-	local handle, hit, coords, normal, material, entity
-	repeat
+    local handle, hit, coords, normal, material, entity
+    repeat
         handle, hit, coords, normal, material, entity = GetShapeTestResultIncludingMaterial(shape)
         Wait(0)
-	until handle ~= 1
-	return hit, coords, normal, material, entity
+    until handle ~= 1
+    return hit, coords, normal, material, entity
 end
 
 ---@param depth number The depth to raycast
 ---@vararg any The arguments to pass to the shape test
 ---@return table, boolean, table, table, integer, integer
 function ESX.Game.RaycastScreen(depth, ...)
-	local world, normal = GetWorldCoordFromScreenCoord(.5, .5)
-	local origin = world + normal
-	local target = world + normal * depth
-	return target, ESX.Game.GetShapeTestResultSync(StartShapeTestLosProbe(origin.x, origin.y, origin.z, target.x, target.y, target.z, ...))
+    local world, normal = GetWorldCoordFromScreenCoord(0.5, 0.5)
+    local origin = world + normal
+    local target = world + normal * depth
+    return target, ESX.Game.GetShapeTestResultSync(StartShapeTestLosProbe(origin.x, origin.y, origin.z, target.x, target.y, target.z, ...))
 end
 
 ---@param entities table The entities to search through
@@ -1281,11 +1280,11 @@ function ESX.ShowInventory()
     exports.esx_inventory:ShowInventory()
 end
 
-RegisterNetEvent('esx:showNotification', ESX.ShowNotification)
+RegisterNetEvent("esx:showNotification", ESX.ShowNotification)
 
-RegisterNetEvent('esx:showAdvancedNotification', ESX.ShowAdvancedNotification)
+RegisterNetEvent("esx:showAdvancedNotification", ESX.ShowAdvancedNotification)
 
-RegisterNetEvent('esx:showHelpNotification', ESX.ShowHelpNotification)
+RegisterNetEvent("esx:showHelpNotification", ESX.ShowHelpNotification)
 
 AddEventHandler("onResourceStop", function(resourceName)
     for i = 1, #ESX.UI.Menu.Opened, 1 do
