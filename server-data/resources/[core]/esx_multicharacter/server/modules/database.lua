@@ -29,7 +29,8 @@ end
 
 MySQL.ready(function()
     local length = 42 + #Server.prefix
-    local DB_COLUMNS = MySQL.query.await(('SELECT TABLE_NAME, COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "%s" AND DATA_TYPE = "varchar" AND COLUMN_NAME IN (?)'):format(Database.name, length), {
+
+    local DB_COLUMNS = MySQL.query.await(('SELECT TABLE_NAME, COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "%s" AND DATA_TYPE = "varchar" AND COLUMN_NAME IN (?)'):format(Database.name), {
         { "identifier", "owner" },
     })
 
@@ -39,9 +40,10 @@ MySQL.ready(function()
 
         for i = 1, #DB_COLUMNS do
             local column = DB_COLUMNS[i]
+
             Database.tables[column.TABLE_NAME] = column.COLUMN_NAME
 
-            if column?.CHARACTER_MAXIMUM_LENGTH < length then
+            if column.CHARACTER_MAXIMUM_LENGTH ~= nil and column.CHARACTER_MAXIMUM_LENGTH < length then
                 count = count + 1
                 columns[column.TABLE_NAME] = column.COLUMN_NAME
             end
@@ -51,14 +53,16 @@ MySQL.ready(function()
             local query = "ALTER TABLE `%s` MODIFY COLUMN `%s` VARCHAR(%s)"
             local queries = table.create(count, 0)
 
-            for k, v in pairs(columns) do
-                queries[#queries + 1] = { query = query:format(k, v, length) }
+            for tableName, columnName in pairs(columns) do
+                queries[#queries + 1] = {
+                    query = query:format(tableName, columnName, length),
+                }
             end
 
             if MySQL.transaction.await(queries) then
                 print(("[^2INFO^7] Updated ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
             else
-                print(("[^2INFO^7] Unable to update ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
+                print(("[^1ERROR^7] Unable to update ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
             end
         end
 

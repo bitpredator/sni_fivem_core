@@ -63,13 +63,27 @@ Tick()
 ---@param cb function|table
 AddEventHandler("cron:runAt", function(h, m, cb)
     local invokingResource = GetInvokingResource() or "Unknown"
+
     local typeH = type(h)
     local typeM = type(m)
     local typeCb = type(cb)
 
     assert(typeH == "number", ("Expected number for h, got %s. Invoking Resource: '%s'"):format(typeH, invokingResource))
+
     assert(typeM == "number", ("Expected number for m, got %s. Invoking Resource: '%s'"):format(typeM, invokingResource))
-    assert(typeCb == "function" or (typeCb == "table" and type(getmetatable(cb)?.__call) == "function"), ("Expected function for cb, got %s. Invoking Resource: '%s'"):format(typeCb, invokingResource))
+
+    local isCallableTable = false
+    if typeCb == "table" then
+        local mt = getmetatable(cb)
+        if mt ~= nil and type(mt.__call) == "function" then
+            isCallableTable = true
+        end
+    end
+
+    if not (typeCb == "function" or isCallableTable) then
+        print(("[cron] Invalid callback from resource '%s'"):format(invokingResource))
+        return
+    end
 
     RunAt(h, m, cb)
 end)
