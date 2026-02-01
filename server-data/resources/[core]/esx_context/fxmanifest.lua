@@ -11,14 +11,14 @@ ui_page("index.html")
 shared_script("@es_extended/imports.lua")
 
 client_scripts({
-  "config.lua",
-  "main.lua",
+    "config.lua",
+    "main.lua",
 })
 
 files({
-  "index.html",
+    "index.html",
 })
 
 dependencies({
-  "es_extended",
+    "es_extended",
 })

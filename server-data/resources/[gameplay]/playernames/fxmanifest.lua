@@ -15,12 +15,12 @@ server_script("playernames_sv.lua")
 
 -- make exports
 local exportList = {
-  "setComponentColor",
-  "setComponentAlpha",
-  "setComponentVisibility",
-  "setWantedLevel",
-  "setHealthBarColor",
-  "setNameTemplate",
+    "setComponentColor",
+    "setComponentAlpha",
+    "setComponentVisibility",
+    "setWantedLevel",
+    "setHealthBarColor",
+    "setNameTemplate",
 }
 
 exports(exportList)
@@ -28,7 +28,7 @@ server_exports(exportList)
 
 -- add files
 files({
-  "template/template.lua",
+    "template/template.lua",
 })
 
 -- support the latest resource manifest

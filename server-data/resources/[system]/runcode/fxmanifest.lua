@@ -20,5 +20,5 @@ client_script("runcode_ui.lua")
 
 ui_page("web/nui.html")
 files({
-  "web/nui.html",
+    "web/nui.html",
 })

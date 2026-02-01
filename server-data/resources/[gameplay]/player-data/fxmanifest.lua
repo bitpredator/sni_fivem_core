@@ -12,5 +12,5 @@ game("common")
 server_script("server.lua")
 
 provides({
-  "cfx.re/playerData.v1alpha1",
+    "cfx.re/playerData.v1alpha1",
 })

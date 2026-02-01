@@ -18,7 +18,6 @@ function Skin:CalcualteHeading(angle)
 end
 
 function Skin:CalcuatePosition(coords)
-
     local angle = self.heading * self.customPI
     local theta = {
         x = math.cos(angle),

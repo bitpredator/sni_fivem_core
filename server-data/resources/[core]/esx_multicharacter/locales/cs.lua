@@ -18,5 +18,5 @@ Locales["cs"] = {
         ["title"] = "VÝBĚR POSTAVY",
         ["char_info_title"] = "Informace o postavě",
         ["play"] = "HRÁT",
-    }
+    },
 }

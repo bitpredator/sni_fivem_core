@@ -18,5 +18,5 @@ Locales["sv"] = {
         ["title"] = "KARAKTÄRSVAL",
         ["char_info_title"] = "Karaktärsinformation",
         ["play"] = "SPELA",
-    }
+    },
 }

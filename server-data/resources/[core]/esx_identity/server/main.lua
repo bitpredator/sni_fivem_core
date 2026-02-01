@@ -42,7 +42,6 @@ local function deleteIdentity(xPlayer)
     deleteIdentityFromDatabase(xPlayer)
 end
 
-
 local function saveIdentityToDatabase(identifier, identity)
     MySQL.update.await("UPDATE users SET firstname = ?, lastname = ?, dateofbirth = ?, sex = ?, height = ? WHERE identifier = ?", { identity.firstName, identity.lastName, identity.dateOfBirth, identity.sex, identity.height, identifier })
 end
@@ -72,8 +71,12 @@ local function checkDOBFormat(dob)
     local minYear = currentYear - Config.MaxAge
     local maxYear = currentYear - 18
 
-    if year < minYear or year > maxYear then return false end
-    if month < 1 or month > 12 then return false end
+    if year < minYear or year > maxYear then
+        return false
+    end
+    if month < 1 or month > 12 then
+        return false
+    end
 
     -- Days in each month (starting from January.)
     local daysInMonth = { 31, isLeapYear(year) and 29 or 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }

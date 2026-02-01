@@ -7,8 +7,8 @@ Server.prefix = Config.Prefix or "char"
 Server.identifierType = ESX.GetConfig("Identifier") or GetConvar("sv_lan", "") == "true" and "ip" or "license"
 
 AddEventHandler("playerConnecting", function(_, _, deferrals)
-   local source = source
-   Server:OnConnecting(source, deferrals)
+    local source = source
+    Server:OnConnecting(source, deferrals)
 end)
 
 RegisterNetEvent("esx_multicharacter:SetupCharacters", function()

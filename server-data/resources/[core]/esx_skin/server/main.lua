@@ -62,4 +62,4 @@ ESX.RegisterCommand("skin", "admin", function(xPlayer, args)
         args.playerId = xPlayer
     end
     args.playerId.triggerEvent("esx_skin:openSaveableMenu")
-end, false, { help = TranslateCap("skin"), arguments = { { name = "playerId", help = TranslateCap("skin"), type = "player" }} })
+end, false, { help = TranslateCap("skin"), arguments = { { name = "playerId", help = TranslateCap("skin"), type = "player" } } })

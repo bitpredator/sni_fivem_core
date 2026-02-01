@@ -6,21 +6,21 @@ local activePlayers = {}
 local function detectUpdates()
     SetTimeout(500, detectUpdates)
 
-    local template = GetConvar('playerNames_template', '[{{id}}] {{name}}')
-    
+    local template = GetConvar("playerNames_template", "[{{id}}] {{name}}")
+
     if curTemplate ~= template then
         setNameTemplate(-1, template)
 
         curTemplate = template
     end
 
-    template = GetConvar('playerNames_svTemplate', '[{{id}}] {{name}}')
+    template = GetConvar("playerNames_svTemplate", "[{{id}}] {{name}}")
 
     for v, _ in pairs(activePlayers) do
         local newTag = formatPlayerNameTag(v, template)
         if newTag ~= curTags[v] then
             setName(v, newTag)
-            
+
             curTags[v] = newTag
         end
     end
@@ -32,13 +32,13 @@ local function detectUpdates()
     end
 end
 
-AddEventHandler('playerDropped', function()
+AddEventHandler("playerDropped", function()
     curTags[source] = nil
     activePlayers[source] = nil
 end)
 
-RegisterNetEvent('playernames:init')
-AddEventHandler('playernames:init', function()
+RegisterNetEvent("playernames:init")
+AddEventHandler("playernames:init", function()
     reconfigure(source)
     activePlayers[source] = true
 end)

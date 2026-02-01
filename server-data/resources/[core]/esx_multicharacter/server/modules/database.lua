@@ -29,7 +29,8 @@ end
 
 MySQL.ready(function()
     local length = 42 + #Server.prefix
-    local DB_COLUMNS = MySQL.query.await(('SELECT TABLE_NAME, COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "%s" AND DATA_TYPE = "varchar" AND COLUMN_NAME IN (?)'):format(Database.name, length), {
+
+    local DB_COLUMNS = MySQL.query.await(('SELECT TABLE_NAME, COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = "%s" AND DATA_TYPE = "varchar" AND COLUMN_NAME IN (?)'):format(Database.name), {
         { "identifier", "owner" },
     })
 
@@ -39,9 +40,10 @@ MySQL.ready(function()
 
         for i = 1, #DB_COLUMNS do
             local column = DB_COLUMNS[i]
+
             Database.tables[column.TABLE_NAME] = column.COLUMN_NAME
 
-            if column?.CHARACTER_MAXIMUM_LENGTH < length then
+            if column.CHARACTER_MAXIMUM_LENGTH ~= nil and column.CHARACTER_MAXIMUM_LENGTH < length then
                 count = count + 1
                 columns[column.TABLE_NAME] = column.COLUMN_NAME
             end
@@ -51,14 +53,16 @@ MySQL.ready(function()
             local query = "ALTER TABLE `%s` MODIFY COLUMN `%s` VARCHAR(%s)"
             local queries = table.create(count, 0)
 
-            for k, v in pairs(columns) do
-                queries[#queries + 1] = { query = query:format(k, v, length) }
+            for tableName, columnName in pairs(columns) do
+                queries[#queries + 1] = {
+                    query = query:format(tableName, columnName, length),
+                }
             end
 
             if MySQL.transaction.await(queries) then
                 print(("[^2INFO^7] Updated ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
             else
-                print(("[^2INFO^7] Unable to update ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
+                print(("[^1ERROR^7] Unable to update ^5%s^7 columns to use ^5VARCHAR(%s)^7"):format(count, length))
             end
         end
 
@@ -96,14 +100,11 @@ function Database:DeleteCharacter(source, charid)
 end
 
 function Database:GetPlayerSlots(identifier)
-    return MySQL.scalar.await("SELECT slots FROM multicharacter_slots WHERE identifier = ?", { identifier }) or
-        Server.slots
+    return MySQL.scalar.await("SELECT slots FROM multicharacter_slots WHERE identifier = ?", { identifier }) or Server.slots
 end
 
 function Database:GetPlayerInfo(identifier, slots)
-    return MySQL.query.await(
-        "SELECT identifier, accounts, job, job_grade, firstname, lastname, dateofbirth, sex, skin, disabled FROM users WHERE identifier LIKE ? LIMIT ?",
-        { identifier, slots })
+    return MySQL.query.await("SELECT identifier, accounts, job, job_grade, firstname, lastname, dateofbirth, sex, skin, disabled FROM users WHERE identifier LIKE ? LIMIT ?", { identifier, slots })
 end
 
 function Database:SetSlots(identifier, slots)
@@ -130,14 +131,14 @@ end
 function Database:EnableSlot(identifier, slot)
     local selectedCharacter = ("char%s:%s"):format(slot, identifier)
 
-    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 0 WHERE identifier = ?", {selectedCharacter})
+    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 0 WHERE identifier = ?", { selectedCharacter })
     return updated > 0
 end
 
 function Database:DisableSlot(identifier, slot)
     local selectedCharacter = ("char%s:%s"):format(slot, identifier)
 
-    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 1 WHERE identifier = ?", {selectedCharacter})
+    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 1 WHERE identifier = ?", { selectedCharacter })
     return updated > 0
 end
 

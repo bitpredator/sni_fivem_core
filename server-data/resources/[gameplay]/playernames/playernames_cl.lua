@@ -18,7 +18,7 @@ local gtComponent = {
     MP_PACKAGES = 13,
     INV_IF_PED_FOLLOWING = 14,
     RANK_TEXT = 15,
-    MP_TYPING = 16
+    MP_TYPING = 16,
 }
 
 local function makeSettings()
@@ -27,7 +27,7 @@ local function makeSettings()
         colors = {},
         healthColor = false,
         toggles = {},
-        wantedLevel = false
+        wantedLevel = false,
     }
 end
 
@@ -70,8 +70,8 @@ function updatePlayerNames()
 
                 -- store the new tag
                 mpGamerTags[i] = {
-                    tag = CreateMpGamerTag(GetPlayerPed(i), nameTag, false, false, '', 0),
-                    ped = ped
+                    tag = CreateMpGamerTag(GetPlayerPed(i), nameTag, false, false, "", 0),
+                    ped = ped,
                 }
             end
 
@@ -142,27 +142,27 @@ local function getSettings(id)
     return mpGamerTagSettings[i]
 end
 
-RegisterNetEvent('playernames:configure')
+RegisterNetEvent("playernames:configure")
 
-AddEventHandler('playernames:configure', function(id, key, ...)
+AddEventHandler("playernames:configure", function(id, key, ...)
     local args = table.pack(...)
 
-    if key == 'tglc' then
+    if key == "tglc" then
         getSettings(id).toggles[args[1]] = args[2]
-    elseif key == 'seta' then
+    elseif key == "seta" then
         getSettings(id).alphas[args[1]] = args[2]
-    elseif key == 'setc' then
+    elseif key == "setc" then
         getSettings(id).colors[args[1]] = args[2]
-    elseif key == 'setw' then
+    elseif key == "setw" then
         getSettings(id).wantedLevel = args[1]
-    elseif key == 'sehc' then
+    elseif key == "sehc" then
         getSettings(id).healthColor = args[1]
-    elseif key == 'rnme' then
+    elseif key == "rnme" then
         getSettings(id).rename = true
-    elseif key == 'name' then
+    elseif key == "name" then
         getSettings(id).serverName = args[1]
         getSettings(id).rename = true
-    elseif key == 'tpl' then
+    elseif key == "tpl" then
         for _, v in pairs(mpGamerTagSettings) do
             v.rename = true
         end
@@ -171,11 +171,11 @@ AddEventHandler('playernames:configure', function(id, key, ...)
     end
 end)
 
-AddEventHandler('playernames:extendContext', function(i, cb)
-    cb('serverName', getSettings(GetPlayerServerId(i)).serverName)
+AddEventHandler("playernames:extendContext", function(i, cb)
+    cb("serverName", getSettings(GetPlayerServerId(i)).serverName)
 end)
 
-AddEventHandler('onResourceStop', function(name)
+AddEventHandler("onResourceStop", function(name)
     if name == GetCurrentResourceName() then
         for _, v in pairs(mpGamerTags) do
             RemoveMpGamerTag(v.tag)
@@ -184,7 +184,7 @@ AddEventHandler('onResourceStop', function(name)
 end)
 
 SetTimeout(0, function()
-    TriggerServerEvent('playernames:init')
+    TriggerServerEvent("playernames:init")
 end)
 
 -- run this function every frame

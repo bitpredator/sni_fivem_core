@@ -6,23 +6,23 @@ version("1.0.1")
 lua54("yes")
 
 shared_scripts({
-  "@es_extended/locale.lua",
-  "locales/*.lua",
-  "@es_extended/imports.lua",
-  "config.lua",
+    "@es_extended/locale.lua",
+    "locales/*.lua",
+    "@es_extended/imports.lua",
+    "config.lua",
 })
 
 server_scripts({
-  "@oxmysql/lib/MySQL.lua",
-  "server/main.lua",
+    "@oxmysql/lib/MySQL.lua",
+    "server/main.lua",
 })
 
 client_scripts({
-  "client/main.lua",
-  "client/modules/*.lua",
+    "client/main.lua",
+    "client/modules/*.lua",
 })
 
 dependencies({
-  "es_extended",
-  "skinchanger",
+    "es_extended",
+    "skinchanger",
 })

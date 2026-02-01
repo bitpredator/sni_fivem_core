@@ -18,5 +18,5 @@ Locales["zh-cn"] = {
         ["title"] = "角色选择",
         ["char_info_title"] = "角色信息",
         ["play"] = "开始游戏",
-    }
+    },
 }

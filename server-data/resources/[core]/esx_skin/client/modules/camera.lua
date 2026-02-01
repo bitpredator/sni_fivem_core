@@ -25,8 +25,8 @@ function Camera:AngleLoop()
 end
 
 function Camera:DisableContols()
-    local controls = {30, 31, 32, 33, 34, 35, 25, 24}
-    for i=1 , #controls do
+    local controls = { 30, 31, 32, 33, 34, 35, 25, 24 }
+    for i = 1, #controls do
         DisableControlAction(2, controls[i], true)
     end
 end
@@ -49,7 +49,7 @@ function Camera:PositionLoop()
 end
 
 function Camera:StartLoops()
-    ESX.TextUI(Translate('use_rotate_view', "Q", "E"))
+    ESX.TextUI(Translate("use_rotate_view", "Q", "E"))
     self:AngleLoop()
     self:PositionLoop()
 end

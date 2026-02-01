@@ -10,11 +10,11 @@ file("style.css")
 file("shadow.js")
 
 chat_theme("gtao")({
-  styleSheet = "style.css",
-  script = "shadow.js",
-  msgTemplates = {
-    default = "<b>{0}</b><span>{1}</span>",
-  },
+    styleSheet = "style.css",
+    script = "shadow.js",
+    msgTemplates = {
+        default = "<b>{0}</b><span>{1}</span>",
+    },
 })
 
 game("common")

@@ -23,7 +23,7 @@ function Server:OnConnecting(source, deferrals)
 
     -- luacheck: ignore
     if not SetEntityOrphanMode then
-        return deferrals.done(("[ESX Multicharacter] ESX Requires a minimum Artifact version of 10188, Please update your server."))
+        return deferrals.done("[ESX Multicharacter] ESX Requires a minimum Artifact version of 10188, Please update your server.")
     end
 
     if Server.oneSync == "off" or Server.oneSync == "legacy" then
@@ -38,7 +38,9 @@ function Server:OnConnecting(source, deferrals)
         deferrals.done("[ESX Multicharacter] OxMySQL Was Unable To Connect to your database. Please make sure it is turned on and correctly configured in your server.cfg")
     end
 
-    if not identifier or not correctLicense then return deferrals.done(("[ESX Multicharacter] Unable to retrieve player identifier.\nIdentifier type: %s"):format(Server.identifierType)) end
+    if not identifier or not correctLicense then
+        return deferrals.done(("[ESX Multicharacter] Unable to retrieve player identifier.\nIdentifier type: %s"):format(Server.identifierType))
+    end
 
     if ESX.GetConfig().EnableDebug or not ESX.Players[identifier] then
         ESX.Players[identifier] = source
@@ -56,14 +58,15 @@ function Server:OnConnecting(source, deferrals)
 
     local function reject()
         return deferrals.done(
-            ("[ESX Multicharacter] There was an error loading your character!\nError code: identifier-active\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same account.\n\nYour identifier: %s"):format(
-                identifier)
+            ("[ESX Multicharacter] There was an error loading your character!\nError code: identifier-active\n\nThis error is caused by a player on this server who has the same identifier as you have. Make sure you are not playing on the same account.\n\nYour identifier: %s"):format(identifier)
         )
     end
 
     local plyRef = ESX.Players[identifier] ---@type number|string If player has not chosen character yet, plyRef = source, otherwise plyRef = identifier prefix ("char1", "char2", etc.)
     if type(plyRef) == "number" then
-        if GetPlayerPing(plyRef --[[@as string]]) > 0 then
+        if
+            GetPlayerPing(plyRef --[[@as string]]) > 0
+        then
             return reject()
         end
 
@@ -76,12 +79,13 @@ function Server:OnConnecting(source, deferrals)
         return deferrals.done()
     end
 
-    if GetPlayerPing(xPlayer.source --[[@as string]]) > 0 then
+    if
+        GetPlayerPing(xPlayer.source --[[@as string]]) > 0
+    then
         return reject()
     end
 
     return cleanupStalePlayer(xPlayer.source)
 end
-
 
 Server:ResetPlayers()

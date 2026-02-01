@@ -18,5 +18,5 @@ Locales["nl"] = {
         ["title"] = "PERSONAGE SELECTIE",
         ["char_info_title"] = "Personage Informatie",
         ["play"] = "SPEEL",
-    }
+    },
 }
