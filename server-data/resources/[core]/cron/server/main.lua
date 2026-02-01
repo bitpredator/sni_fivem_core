@@ -37,7 +37,7 @@ function OnTime(timestamp)
         })
 
         if timestamp >= scheduledTimestamp and (not lastTimestamp or lastTimestamp < scheduledTimestamp) then
-            local d = os.date('*t', scheduledTimestamp).wday
+            local d = os.date("*t", scheduledTimestamp).wday
             cronJobs[i].cb(d, cronJobs[i].h, cronJobs[i].m)
         end
     end

@@ -18,5 +18,5 @@ Locales["sl"] = {
         ["title"] = "IZBIRA LIKA",
         ["char_info_title"] = "Informacije o liku",
         ["play"] = "IGRAJ",
-    }
+    },
 }

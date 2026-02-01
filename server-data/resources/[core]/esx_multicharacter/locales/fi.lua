@@ -18,5 +18,5 @@ Locales["fi"] = {
         ["title"] = "HAHMON VALINTA",
         ["char_info_title"] = "Hahmon tiedot",
         ["play"] = "PELAA",
-    }
+    },
 }

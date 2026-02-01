@@ -11,9 +11,9 @@ loadscreen_cursor("yes")
 client_script("client.lua")
 
 files({
-  "index.html",
-  "style.css",
-  "script.js",
-  "assets/intro.mp4",
-  "assets/intro.mp3",
+    "index.html",
+    "style.css",
+    "script.js",
+    "assets/intro.mp4",
+    "assets/intro.mp3",
 })

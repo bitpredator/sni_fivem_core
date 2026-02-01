@@ -1,23 +1,23 @@
-RegisterNuiCallback('SelectCharacter', function (data, cb)
+RegisterNuiCallback("SelectCharacter", function(data, cb)
     local selectedIndex = tonumber(data.id)
-    
+
     if selectedIndex then
         Menu:SelectCharacter(selectedIndex)
     end
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNuiCallback('PlayCharacter', function (data, cb)
+RegisterNuiCallback("PlayCharacter", function(data, cb)
     Menu:PlayCharacter()
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNuiCallback('DeleteCharacter', function (data, cb)
+RegisterNuiCallback("DeleteCharacter", function(data, cb)
     Menu:DeleteCharacter()
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNuiCallback('CreateCharacter', function (data, cb)
+RegisterNuiCallback("CreateCharacter", function(data, cb)
     Menu:NewCharacter()
-    cb('ok')
+    cb("ok")
 end)

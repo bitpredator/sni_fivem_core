@@ -34,7 +34,6 @@ function Menu:NewCharacter()
     Multicharacter:CloseUI()
 end
 
-
 function Menu:InitCharacter()
     local Characters = Multicharacter.Characters
     local Character = next(Characters)
@@ -44,7 +43,7 @@ function Menu:InitCharacter()
         Multicharacter:SetupCharacter(Character)
     end
     Wait(500)
-    
+
     SendNUIMessage({
         action = "ToggleMulticharacter",
         data = {
@@ -53,7 +52,7 @@ function Menu:InitCharacter()
             CanDelete = Config.CanDelete,
             AllowedSlot = Multicharacter.slots,
             Locale = Locales[Config.Locale].UI,
-        }
+        },
     })
 
     SetNuiFocus(true, true)

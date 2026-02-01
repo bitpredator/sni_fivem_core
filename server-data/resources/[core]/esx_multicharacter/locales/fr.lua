@@ -18,5 +18,5 @@ Locales["fr"] = {
         ["title"] = "SÉLECTION DE PERSONNAGE",
         ["char_info_title"] = "Infos du personnage",
         ["play"] = "JOUER",
-    }
+    },
 }

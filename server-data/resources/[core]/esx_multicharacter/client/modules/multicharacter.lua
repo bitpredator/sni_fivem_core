@@ -12,7 +12,7 @@ function Multicharacter:SetupCamera()
 
     local offset = GetOffsetFromEntityInWorldCoords(self.playerPed, 0, 1.7, 0.4)
 
-    SetCamCoord(self.cam, offset.x + 0.7, offset.y , offset.z)
+    SetCamCoord(self.cam, offset.x + 0.7, offset.y, offset.z)
     PointCamAtCoord(self.cam, self.spawnCoords.x + 0.4, self.spawnCoords.y, self.spawnCoords.z + 1.3)
 end
 
@@ -39,7 +39,7 @@ end
 local HiddenCompents = {}
 
 local function HideComponents(hide)
-    local components = {11, 12, 21}
+    local components = { 11, 12, 21 }
     for i = 1, #components do
         if hide then
             local size = GetHudComponentSize(components[i])
@@ -72,7 +72,7 @@ function Multicharacter:SetupCharacters()
     self.spawned = false
 
     self.playerPed = PlayerPedId()
-    self.spawnCoords = Config.Spawn[ESX.Math.Random(1,#Config.Spawn)]
+    self.spawnCoords = Config.Spawn[ESX.Math.Random(1, #Config.Spawn)]
 
     SetEntityCoords(self.playerPed, self.spawnCoords.x, self.spawnCoords.y, self.spawnCoords.z, true, false, false, false)
     SetEntityHeading(self.playerPed, self.spawnCoords.w)
@@ -140,8 +140,8 @@ function Multicharacter:CloseUI()
     SendNUIMessage({
         action = "ToggleMulticharacter",
         data = {
-            show = false
-        }
+            show = false,
+        },
     })
     SetNuiFocus(false, false)
 end
@@ -202,7 +202,6 @@ function Multicharacter:LoadSkinCreator(skin)
 end
 
 function Multicharacter:SetDefaultSkin(playerData)
-
     local skin = Config.Default[playerData.sex]
     skin.sex = playerData.sex == "m" and 0 or 1
 
@@ -255,7 +254,6 @@ function Multicharacter:PlayerLoaded(playerData, isNew, skin)
         skin = exports["skinchanger"]:GetSkin()
         DoScreenFadeOut(500)
         self:AwaitFadeOut()
-
     elseif not isNew then
         TriggerEvent("skinchanger:loadSkin", skin or self.Characters[self.spawned].skin)
     end

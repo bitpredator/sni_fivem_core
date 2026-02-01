@@ -96,14 +96,11 @@ function Database:DeleteCharacter(source, charid)
 end
 
 function Database:GetPlayerSlots(identifier)
-    return MySQL.scalar.await("SELECT slots FROM multicharacter_slots WHERE identifier = ?", { identifier }) or
-        Server.slots
+    return MySQL.scalar.await("SELECT slots FROM multicharacter_slots WHERE identifier = ?", { identifier }) or Server.slots
 end
 
 function Database:GetPlayerInfo(identifier, slots)
-    return MySQL.query.await(
-        "SELECT identifier, accounts, job, job_grade, firstname, lastname, dateofbirth, sex, skin, disabled FROM users WHERE identifier LIKE ? LIMIT ?",
-        { identifier, slots })
+    return MySQL.query.await("SELECT identifier, accounts, job, job_grade, firstname, lastname, dateofbirth, sex, skin, disabled FROM users WHERE identifier LIKE ? LIMIT ?", { identifier, slots })
 end
 
 function Database:SetSlots(identifier, slots)
@@ -130,14 +127,14 @@ end
 function Database:EnableSlot(identifier, slot)
     local selectedCharacter = ("char%s:%s"):format(slot, identifier)
 
-    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 0 WHERE identifier = ?", {selectedCharacter})
+    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 0 WHERE identifier = ?", { selectedCharacter })
     return updated > 0
 end
 
 function Database:DisableSlot(identifier, slot)
     local selectedCharacter = ("char%s:%s"):format(slot, identifier)
 
-    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 1 WHERE identifier = ?", {selectedCharacter})
+    local updated = MySQL.update.await("UPDATE `users` SET `disabled` = 1 WHERE identifier = ?", { selectedCharacter })
     return updated > 0
 end
 

@@ -18,5 +18,5 @@ Locales["hu"] = {
         ["title"] = "KARAKTER KIVÁLASZTÁSA",
         ["char_info_title"] = "Karakterinformáció",
         ["play"] = "JÁTÉK",
-    }
+    },
 }

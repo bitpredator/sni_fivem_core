@@ -17,19 +17,19 @@ end)
 
 ESX.SecureNetEvent("esx_multicharacter:SetupUI", function(data, slots)
     if not nuiReady then
-        print('[WARNING]', 'NUI not ready yet, awaiting...')
+        print("[WARNING]", "NUI not ready yet, awaiting...")
         ESX.Await(function()
             return nuiReady == true
-        end, 'NUI Failed to load after 10000ms', 10000)
+        end, "NUI Failed to load after 10000ms", 10000)
     end
     Multicharacter:SetupUI(data, slots)
 end)
 
-RegisterNetEvent('esx:playerLoaded', function(playerData, isNew, skin)
+RegisterNetEvent("esx:playerLoaded", function(playerData, isNew, skin)
     Multicharacter:PlayerLoaded(playerData, isNew, skin)
 end)
 
-ESX.SecureNetEvent('esx:onPlayerLogout', function()
+ESX.SecureNetEvent("esx:onPlayerLogout", function()
     DoScreenFadeOut(500)
     Wait(5000)
 
@@ -54,7 +54,7 @@ if Config.Relog then
     end, false)
 end
 
-RegisterNuiCallback('nuiReady', function(_, cb)
+RegisterNuiCallback("nuiReady", function(_, cb)
     nuiReady = true
     cb(1)
 end)

@@ -10,7 +10,7 @@ local function openMenu(namespace, name, data)
 
     SendNUIMessage({
         action = "openMenu",
-        data = data
+        data = data,
     })
 end
 
@@ -26,7 +26,7 @@ local function closeMenu(namespace, name)
         data = {
             namespace = namespace,
             name = name,
-        }
+        },
     })
 end
 
