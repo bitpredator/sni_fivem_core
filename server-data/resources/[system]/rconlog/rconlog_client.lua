@@ -1,6 +1,6 @@
-RegisterNetEvent('rlUpdateNames')
+RegisterNetEvent("rlUpdateNames")
 
-AddEventHandler('rlUpdateNames', function()
+AddEventHandler("rlUpdateNames", function()
     local names = {}
 
     for i = 0, 31 do
@@ -9,17 +9,17 @@ AddEventHandler('rlUpdateNames', function()
         end
     end
 
-    TriggerServerEvent('rlUpdateNamesResult', names)
+    TriggerServerEvent("rlUpdateNamesResult", names)
 end)
 
 Citizen.CreateThread(function()
-	while true do
-		Wait(0)
+    while true do
+        Wait(0)
 
-		if NetworkIsSessionStarted() then
-			TriggerServerEvent('rlPlayerActivated')
+        if NetworkIsSessionStarted() then
+            TriggerServerEvent("rlPlayerActivated")
 
-			return
-		end
-	end
+            return
+        end
+    end
 end)
