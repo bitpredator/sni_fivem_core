@@ -19,7 +19,6 @@ function PlayerManagement()
         return
     end
     Config.Zones.ShopEntering.Type = 1
-
 end
 
 RegisterNetEvent("esx:playerLoaded")
